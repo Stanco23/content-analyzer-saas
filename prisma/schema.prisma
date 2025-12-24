@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SubscriptionTier {
+  FREE
+  PRO
+  BUSINESS
+  API_STARTER
+  API_GROWTH
+  API_ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  CANCELLED
+  PAST_DUE
+  TRIALING
+}
+
+enum Environment {
+  PRODUCTION
+  TESTING
+}
+
+enum ApiKeyTier {
+  STARTER
+  GROWTH
+  ENTERPRISE
+}
+
+model User {
+  id                    String             @id @default(cuid())
+  clerkId               String             @unique
+  email                 String             @unique
+  name                  String?
+  subscriptionTier      SubscriptionTier
+  subscriptionStatus    SubscriptionStatus
+  paddleSubscriptionId  String?
+  paddleCustomerId      String?
+  analysesCount         Int                @default(0)
+  monthlyAnalysesUsed   Int                @default(0)
+  lastResetDate         DateTime?
+  analyses              Analysis[]
+  apiKeys               ApiKey[]
+  webhookEndpoints      WebhookEndpoint[]
+  usageLogs             UsageLog[]
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  @@index([email])
+  @@index([clerkId])
+}
+
+model Analysis {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title             String
+  content           String
+  wordCount         Int
+  readabilityScore  Float?
+  seoScore          Float?
+  keywordDensity    Json?
+  suggestions       Json?
+  tokensUsed        Int      @default(0)
+  processingTimeMs  Int?
+  createdAt         DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model ApiKey {
+  id                 String      @id @default(cuid())
+  userId             String
+  user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name               String
+  keyPrefix          String      @unique
+  hashedKey          String      @unique
+  lastFourChars      String
+  environment        Environment
+  tier               ApiKeyTier
+  rateLimit          Int
+  dailyLimit         Int
+  monthlyLimit       Int
+  totalRequests      Int        @default(0)
+  successfulRequests Int        @default(0)
+  failedRequests     Int        @default(0)
+  dailyUsage         Int        @default(0)
+  monthlyUsage       Int        @default(0)
+  lastUsedAt         DateTime?
+  lastResetDate      DateTime?
+  ipWhitelist        String[]
+  isActive           Boolean    @default(true)
+  revokedAt          DateTime?
+  revokedReason      String?
+  expiresAt          DateTime?
+  usageLogs          UsageLog[]
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([hashedKey])
+  @@index([keyPrefix])
+  @@index([isActive])
+}
+
+model UsageLog {
+  id              String   @id @default(cuid())
+  apiKeyId        String?
+  apiKey          ApiKey?  @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint        String
+  method          String
+  statusCode      Int
+  tokensUsed      Int?
+  processingTimeMs Int?
+  wordCount       Int?
+  ipAddress       String
+  userAgent       String?
+  requestId       String   @unique
+  errorMessage    String?
+  errorCode       String?
+  timestamp       DateTime @default(now())
+
+  @@index([apiKeyId, timestamp])
+  @@index([userId, timestamp])
+  @@index([timestamp])
+}
+
+model WebhookEndpoint {
+  id            String            @id @default(cuid())
+  userId        String
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url           String
+  description   String?
+  secret        String
+  events        String[]
+  isActive      Boolean           @default(true)
+  lastSuccessAt DateTime?
+  lastFailureAt DateTime?
+  failureCount  Int               @default(0)
+  deliveries    WebhookDelivery[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([userId])
+}
+
+model WebhookDelivery {
+  id                 String          @id @default(cuid())
+  webhookEndpointId  String
+  webhookEndpoint    WebhookEndpoint @relation(fields: [webhookEndpointId], references: [id], onDelete: Cascade)
+  eventType          String
+  payload            Json
+  statusCode         Int?
+  responseBody       String?
+  responseTimeMs     Int?
+  attemptNumber      Int
+  success            Boolean
+  errorMessage       String?
+  createdAt          DateTime        @default(now())
+  deliveredAt        DateTime?
+
+  @@index([webhookEndpointId, createdAt])
+}
+
+model RateLimit {
+  id            String   @id @default(cuid())
+  identifier    String
+  endpoint      String
+  requestCount  Int
+  windowStart   DateTime
+  updatedAt     DateTime @updatedAt
+
+  @@unique([identifier, endpoint])
+  @@index([identifier])
+}
