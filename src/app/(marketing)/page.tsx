@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Zap, Shield, BarChart } from "lucide-react";
 
-export default function Home() {
+export default function LandingPage() {
   return (
     <div>
       {/* Hero */}
