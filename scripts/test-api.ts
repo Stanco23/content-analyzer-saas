@@ -558,18 +558,18 @@ async function runAllTests() {
   logSection('Test Summary');
   console.log(`${colors.bold}Endpoint Test Results:${colors.reset}`);
 
-  const isSkipped = (r: any) => r?.skipped === true;
-  const testResults = [
-    { name: 'Health', success: results.health?.ok, skipped: false },
-    { name: 'Analyze', success: isSkipped(results.analyze) ? undefined : results.analyze?.ok, skipped: isSkipped(results.analyze) },
-    { name: 'Enhance', success: isSkipped(results.enhance) ? undefined : results.enhance?.ok, skipped: isSkipped(results.enhance) },
-    { name: 'List', success: isSkipped(results.list) ? undefined : results.list?.ok, skipped: isSkipped(results.list) },
-    { name: 'Sync', success: isSkipped(results.sync) ? undefined : results.sync?.ok, skipped: isSkipped(results.sync) },
-    { name: 'Trial', success: isSkipped(results.trial) ? undefined : results.trial?.ok, skipped: isSkipped(results.trial) },
-    { name: 'Profile', success: isSkipped(results.profile) ? undefined : results.profile?.ok, skipped: isSkipped(results.profile) },
-    { name: 'Checkout', success: isSkipped(results.checkout) ? undefined : results.checkout?.ok, skipped: isSkipped(results.checkout) },
-    { name: 'Portal', success: isSkipped(results.portal) ? undefined : results.portal?.ok, skipped: isSkipped(results.portal) },
-    { name: 'Webhook', success: results.webhook?.status >= 400, skipped: false },
+  interface TestResult { name: string; success?: boolean; skipped: boolean }
+  const testResults: TestResult[] = [
+    { name: 'Health', success: (results.health as any)?.ok, skipped: false },
+    { name: 'Analyze', success: (results.analyze as any)?.ok, skipped: (results.analyze as any)?.skipped || false },
+    { name: 'Enhance', success: (results.enhance as any)?.ok, skipped: (results.enhance as any)?.skipped || false },
+    { name: 'List', success: (results.list as any)?.ok, skipped: (results.list as any)?.skipped || false },
+    { name: 'Sync', success: (results.sync as any)?.ok, skipped: (results.sync as any)?.skipped || false },
+    { name: 'Trial', success: (results.trial as any)?.ok, skipped: (results.trial as any)?.skipped || false },
+    { name: 'Profile', success: (results.profile as any)?.ok, skipped: (results.profile as any)?.skipped || false },
+    { name: 'Checkout', success: (results.checkout as any)?.ok, skipped: (results.checkout as any)?.skipped || false },
+    { name: 'Portal', success: (results.portal as any)?.ok, skipped: (results.portal as any)?.skipped || false },
+    { name: 'Webhook', success: (results.webhook as any)?.status >= 400, skipped: false },
   ];
 
   let passed = 0;
