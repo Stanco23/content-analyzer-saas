@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/docs",
-      "destination": "https://contentlens.mintlify.dev/docs"
+      "destination": "https://contentlens.mintlify.app/docs"
     },
     {
       "source": "/docs/:match*",
-      "destination": "https://contentlens.mintlify.dev/docs/:match*"
+      "destination": "https://contentlens.mintlify.app/docs/:match*"
     }
   ]
 }
