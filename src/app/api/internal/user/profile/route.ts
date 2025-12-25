@@ -45,17 +45,24 @@ async function syncSubscriptionFromPolar(polarCustomerId: string): Promise<{ tie
             'inactive': 'INACTIVE',
           };
 
-          await prisma.user.update({
+          // Find user by polarCustomerId first (since it's not a unique identifier)
+          const userToUpdate = await prisma.user.findFirst({
             where: { polarCustomerId },
-            data: {
-              subscriptionTier: tier as any,
-              subscriptionStatus: statusMap[activeSub.status] || 'INACTIVE',
-              polarSubscriptionId: activeSub.id,
-            },
           });
 
-          console.log(`Synced subscription for customer ${polarCustomerId}: ${tier} (${activeSub.status})`);
-          return { tier, status: activeSub.status };
+          if (userToUpdate) {
+            await prisma.user.update({
+              where: { id: userToUpdate.id },
+              data: {
+                subscriptionTier: tier as any,
+                subscriptionStatus: statusMap[activeSub.status] || 'INACTIVE',
+                polarSubscriptionId: activeSub.id,
+              },
+            });
+
+            console.log(`Synced subscription for customer ${polarCustomerId}: ${tier} (${activeSub.status})`);
+            return { tier, status: activeSub.status };
+          }
         }
       }
     }
