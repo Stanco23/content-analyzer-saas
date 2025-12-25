@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -46,7 +46,17 @@ interface Stats {
   subscriptionTier: string;
 }
 
-const statCards = [
+interface StatCard {
+  title: string;
+  description: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  color: string;
+  bg: string;
+  value?: string;
+  isTier?: boolean;
+}
+
+const statCards: StatCard[] = [
   {
     title: "Total Analyses",
     description: "All-time analyses performed",
@@ -83,7 +93,7 @@ const tierColors: Record<string, string> = {
   BUSINESS: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
 };
 
-export default function DashboardPage() {
+function DashboardContent() {
   const { user, isLoaded } = useUser();
   const searchParams = useSearchParams();
   const [analyses, setAnalyses] = useState<Analysis[]>([]);
@@ -428,5 +438,40 @@ export default function DashboardPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+function DashboardLoading() {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Skeleton className="h-10 w-10 rounded-xl" />
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-8 w-8 rounded-lg" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-8 w-16" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<DashboardLoading />}>
+      <DashboardContent />
+    </Suspense>
   );
 }

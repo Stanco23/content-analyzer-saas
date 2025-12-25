@@ -248,8 +248,12 @@ function MethodBadge({ method }: { method: string }) {
   );
 }
 
-function ParamTable({ params }: { params: Record<string, any> | Array<{ name: string; type: string; required?: boolean; description: string }> }) {
+function ParamTable({ params }: { params: Record<string, any> | Array<{ name: string; type: string; required?: boolean; description: string }> | undefined }) {
   const isArray = Array.isArray(params);
+
+  if (!params) {
+    return null;
+  }
 
   if (isArray) {
     return (
@@ -490,12 +494,12 @@ export default function ApiDocsPage() {
                       {"queryParams" in endpoint ? (
                         <div>
                           <h4 className="text-sm font-semibold mb-3">Query Parameters</h4>
-                          <ParamTable params={endpoint.queryParams!} />
+                          <ParamTable params={endpoint.queryParams} />
                         </div>
                       ) : (
                         <div>
                           <h4 className="text-sm font-semibold mb-3">Request Body</h4>
-                          <ParamTable params={endpoint.requestBody!} />
+                          <ParamTable params={endpoint.requestBody} />
                         </div>
                       )}
 

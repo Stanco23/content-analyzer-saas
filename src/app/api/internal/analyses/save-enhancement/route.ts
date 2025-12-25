@@ -66,7 +66,7 @@ export async function POST(request: Request) {
         sentimentScore: null,
         sourceRelevanceScore: null,
         keywordDensity: {},
-        suggestions: [],
+        suggestions: [] as unknown as any,
         enhancedContent: enhancedContent,
         isEnhanced: true,
         originalAnalysisId: originalAnalysisId || null,

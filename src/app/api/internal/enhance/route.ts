@@ -87,6 +87,10 @@ export async function POST(request: Request) {
 
     const { content, title, options } = validation.data;
 
+    // Provide defaults for optional options
+    const tone = options?.tone || 'professional';
+    const goal = options?.goal || 'improve';
+
     // Generate enhanced content based on options
     const goalInstructions = {
       improve: "Improve the overall quality, clarity, and engagement of this content.",
@@ -101,8 +105,8 @@ export async function POST(request: Request) {
     const enhancementPrompt = `
 You are an expert content editor. Your task is to enhance the following content.
 
-Goal: ${goalInstructions[options.goal]}
-Tone: ${options.tone}
+Goal: ${goalInstructions[goal]}
+Tone: ${tone}
 
 Please provide an enhanced version of the content that:
 1. Maintains the original meaning and key messages
@@ -119,7 +123,7 @@ Respond ONLY with the enhanced content, no explanations or markdown formatting.
 
     // Call AI to enhance content (simulated - in production call MiniMax/Anthropic)
     // For now, we'll create a simulated enhancement
-    const enhancedContent = await enhanceContentWithAI(content, options.goal, options.tone);
+    const enhancedContent = await enhanceContentWithAI(content, goal, tone);
 
     // Update usage
     await prisma.user.update({

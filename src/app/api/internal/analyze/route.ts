@@ -123,7 +123,7 @@ export async function POST(request: Request) {
         sentimentScore: result.sentimentScore,
         sourceRelevanceScore: result.sourceRelevanceScore,
         keywordDensity: result.keywordDensity || {},
-        suggestions: (result.suggestions || []) as JsonArray,
+        suggestions: (result.suggestions || []) as unknown as JsonArray,
         enhancedContent: result.enhancements?.improved_content || null,
         tokensUsed: result.tokens_used,
         processingTimeMs: result.processing_time_ms,

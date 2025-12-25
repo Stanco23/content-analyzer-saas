@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Get headers
-  const headerPayload = headers();
+  const headerPayload = await headers();
   const svix_id = headerPayload.get('svix-id');
   const svix_timestamp = headerPayload.get('svix-timestamp');
   const svix_signature = headerPayload.get('svix-signature');
@@ -118,7 +118,7 @@ export async function POST(req: NextRequest) {
 
       case 'subscription.created':
       case 'subscription.active': {
-        const subData = data as PolarWebhookPayload;
+        const subData = data as any;
         const tier = tierFromProductId(subData.product_id);
 
         if (tier) {
@@ -145,7 +145,7 @@ export async function POST(req: NextRequest) {
       }
 
       case 'subscription.updated': {
-        const subData = data as PolarWebhookPayload;
+        const subData = data as any;
         const tier = tierFromProductId(subData.product_id);
 
         if (tier) {
@@ -170,7 +170,7 @@ export async function POST(req: NextRequest) {
 
       case 'subscription.canceled':
       case 'subscription.revoked': {
-        const subData = data as PolarWebhookPayload;
+        const subData = data as any;
         const user = await prisma.user.findFirst({
           where: { polarSubscriptionId: subData.id },
         });
@@ -188,7 +188,7 @@ export async function POST(req: NextRequest) {
       }
 
       case 'subscription.past_due': {
-        const subData = data as PolarWebhookPayload;
+        const subData = data as any;
         const user = await prisma.user.findFirst({
           where: { polarSubscriptionId: subData.id },
         });
@@ -206,7 +206,7 @@ export async function POST(req: NextRequest) {
       }
 
       case 'customer.created': {
-        const customerData = data as PolarWebhookPayload;
+        const customerData = data as any;
         // Store customer ID for user if email matches
         const user = await prisma.user.findFirst({
           where: { email: (customerData as any).email },

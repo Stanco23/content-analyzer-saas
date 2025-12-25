@@ -39,6 +39,7 @@ interface AnalysisResult {
   gradeLevel: number | null;
   keywordDensity: Record<string, number> | null;
   suggestions: Suggestion[];
+  isEnhanced: boolean;
   createdAt: string;
 }
 
