@@ -7,6 +7,14 @@
     {
       "source": "/docs/:match*",
       "destination": "https://vssh.mintlify.app/docs/:match*"
+    },
+    {
+      "source": "/docs/_next/:match*",
+      "destination": "https://vssh.mintlify.app/_next/:match*"
+    },
+    {
+      "source": "/docs/api/:match*",
+      "destination": "https://vssh.mintlify.app/api/:match*"
     }
   ]
 }
