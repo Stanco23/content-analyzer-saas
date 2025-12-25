@@ -4,6 +4,11 @@ import { z } from "zod";
 import { prisma } from "@/lib/db/prisma";
 import { analyzeContent } from "@/lib/ai/minimax";
 
+// Type for JSON fields
+type JsonValue = string | number | boolean | null | JsonObject | JsonArray;
+interface JsonObject { [key: string]: JsonValue }
+interface JsonArray extends Array<JsonValue> {}
+
 const analyzeSchema = z.object({
   content: z.string().min(100, "Content must be at least 100 characters").max(50000),
   title: z.string().optional(),
@@ -118,7 +123,7 @@ export async function POST(request: Request) {
         sentimentScore: result.sentimentScore,
         sourceRelevanceScore: result.sourceRelevanceScore,
         keywordDensity: result.keywordDensity || {},
-        suggestions: result.suggestions || [],
+        suggestions: (result.suggestions || []) as JsonArray,
         enhancedContent: result.enhancements?.improved_content || null,
         tokensUsed: result.tokens_used,
         processingTimeMs: result.processing_time_ms,
