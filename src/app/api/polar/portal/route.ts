@@ -21,7 +21,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (!user.polarCustomerId) {
-      return NextResponse.json({ error: 'No Polar customer ID found' }, { status: 400 });
+      return NextResponse.json({
+        error: 'No subscription found',
+        message: 'You need an active subscription to access the customer portal.'
+      }, { status: 400 });
     }
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -33,7 +36,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Portal error:', error);
     return NextResponse.json(
-      { error: 'Failed to create portal session' },
+      { error: 'Failed to create portal session', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }

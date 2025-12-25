@@ -34,23 +34,31 @@ export async function POST(request: NextRequest) {
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
-    // Create checkout session with metadata for webhook processing
-    const checkout = await polar.createCheckoutSession({
-      customer_id: user.polarCustomerId || undefined,
-      customer_email: user.email,
+    // Build checkout params - only include customer_id if it exists
+    const checkoutParams: {
+      product_id: string;
+      success_url: string;
+      cancel_url?: string;
+      customer_email?: string;
+      customer_id?: string;
+    } = {
       product_id: productId,
       success_url: `${appUrl}/dashboard?checkout=success`,
-      cancel_url: `${appUrl}/dashboard?checkout=cancelled`,
-    });
+      customer_email: user.email,
+    };
+
+    if (user.polarCustomerId) {
+      checkoutParams.customer_id = user.polarCustomerId;
+    }
+
+    // Create checkout session with metadata for webhook processing
+    const checkout = await polar.createCheckoutSession(checkoutParams);
 
     return NextResponse.json({ success: true, checkoutUrl: checkout.url });
   } catch (error) {
-    console.error('Checkout error:', {
-      message: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+    console.error('Checkout error:', error);
     return NextResponse.json(
-      { error: 'Failed to create checkout session' },
+      { error: 'Failed to create checkout session', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
