@@ -558,17 +558,18 @@ async function runAllTests() {
   logSection('Test Summary');
   console.log(`${colors.bold}Endpoint Test Results:${colors.reset}`);
 
+  const isSkipped = (r: any) => r?.skipped === true;
   const testResults = [
     { name: 'Health', success: results.health?.ok, skipped: false },
-    { name: 'Analyze', success: results.analyze?.ok, skipped: results.analyze?.skipped },
-    { name: 'Enhance', success: results.enhance?.ok, skipped: results.enhance?.skipped },
-    { name: 'List', success: results.list?.ok, skipped: results.list?.skipped },
-    { name: 'Sync', success: results.sync?.ok, skipped: results.sync?.skipped },
-    { name: 'Trial', success: results.trial?.ok, skipped: results.trial?.skipped },
-    { name: 'Profile', success: results.profile?.ok, skipped: results.profile?.skipped },
-    { name: 'Checkout', success: results.checkout?.ok, skipped: results.checkout?.skipped },
-    { name: 'Portal', success: results.portal?.ok, skipped: results.portal?.skipped },
-    { name: 'Webhook', success: results.webhook?.status >= 400, skipped: false }, // Expected to reject without signature
+    { name: 'Analyze', success: isSkipped(results.analyze) ? undefined : results.analyze?.ok, skipped: isSkipped(results.analyze) },
+    { name: 'Enhance', success: isSkipped(results.enhance) ? undefined : results.enhance?.ok, skipped: isSkipped(results.enhance) },
+    { name: 'List', success: isSkipped(results.list) ? undefined : results.list?.ok, skipped: isSkipped(results.list) },
+    { name: 'Sync', success: isSkipped(results.sync) ? undefined : results.sync?.ok, skipped: isSkipped(results.sync) },
+    { name: 'Trial', success: isSkipped(results.trial) ? undefined : results.trial?.ok, skipped: isSkipped(results.trial) },
+    { name: 'Profile', success: isSkipped(results.profile) ? undefined : results.profile?.ok, skipped: isSkipped(results.profile) },
+    { name: 'Checkout', success: isSkipped(results.checkout) ? undefined : results.checkout?.ok, skipped: isSkipped(results.checkout) },
+    { name: 'Portal', success: isSkipped(results.portal) ? undefined : results.portal?.ok, skipped: isSkipped(results.portal) },
+    { name: 'Webhook', success: results.webhook?.status >= 400, skipped: false },
   ];
 
   let passed = 0;
