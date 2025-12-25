@@ -1,0 +1,101 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "ContentLens API",
+  "logo": {
+    "dark": "/logo-dark.svg",
+    "light": "/logo-light.svg"
+  },
+  "favicon": "/favicon.ico",
+  "colors": {
+    "primary": "#6366f1",
+    "light": "#818cf8",
+    "dark": "#4f46e5",
+    "background": {
+      "dark": "#0f172a",
+      "light": "#ffffff"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "API Reference",
+      "url": "/docs/api-reference"
+    },
+    {
+      "name": "Guides",
+      "url": "/docs/guides"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get API Key",
+    "url": "https://contentlens.dev/dashboard"
+  },
+  "anchors": [
+    {
+      "name": "API Reference",
+      "icon": "code",
+      "url": "/docs/api-reference"
+    },
+    {
+      "name": "Guides",
+      "icon": "book",
+      "url": "/docs/guides"
+    },
+    {
+      "name": "Support",
+      "icon": "life-ring",
+      "url": "mailto:support@contentlens.dev"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "docs/index",
+        "docs/authentication"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "docs/api-reference/index",
+        {
+          "group": "Analyses",
+          "pages": [
+            "docs/api-reference/analyses/analyze",
+            "docs/api-reference/analyses/enhance",
+            "docs/api-reference/analyses/list"
+          ]
+        },
+        {
+          "group": "Subscriptions",
+          "pages": [
+            "docs/api-reference/subscriptions/overview",
+            "docs/api-reference/subscriptions/checkout",
+            "docs/api-reference/subscriptions/portal",
+            "docs/api-reference/subscriptions/sync",
+            "docs/api-reference/subscriptions/trial"
+          ]
+        },
+        {
+          "group": "User",
+          "pages": [
+            "docs/api-reference/user/profile"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        "docs/guides/getting-started",
+        "docs/guides/scoring-guide",
+        "docs/guides/version-control"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "twitter": "https://twitter.com/contentlens",
+    "github": "https://github.com/contentlens"
+  },
+  "enabled": true
+}
