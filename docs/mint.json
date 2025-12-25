@@ -1,28 +1,32 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "ContentLens API",
+  "name": "ContentLens",
   "logo": {
-    "dark": "https://contentlens.dev/logo-dark.svg",
-    "light": "https://contentlens.dev/logo.svg"
+    "dark": "/logo-dark.svg",
+    "light": "/logo.svg"
   },
   "favicon": "/favicon.ico",
   "colors": {
-    "primary": "#6366f1",
-    "light": "#818cf8",
-    "dark": "#4f46e5",
+    "primary": "#312e81",
+    "light": "#4f46e5",
+    "dark": "#312e81",
     "background": {
-      "dark": "#0f172a",
+      "dark": "#09090b",
       "light": "#ffffff"
+    },
+    "anchors": {
+      "from": "#312e81",
+      "to": "#4f46e5"
     }
   },
   "topbarLinks": [
     {
-      "name": "API Reference",
-      "url": "/api-reference"
+      "name": "Documentation",
+      "url": "/"
     },
     {
-      "name": "Guides",
-      "url": "/guides"
+      "name": "API Reference",
+      "url": "/api-reference"
     }
   ],
   "topbarCtaButton": {
@@ -41,9 +45,9 @@
       "url": "/guides"
     },
     {
-      "name": "Support",
-      "icon": "life-ring",
-      "url": "mailto:support@contentlens.dev"
+      "name": "ContentLens",
+      "icon": "globe",
+      "url": "https://contentlens.dev"
     }
   ],
   "navigation": [
@@ -59,7 +63,7 @@
       "pages": [
         "api-reference/index",
         {
-          "group": "Analyses",
+          "group": "Content Analysis",
           "pages": [
             "api-reference/analyses/analyze",
             "api-reference/analyses/enhance",

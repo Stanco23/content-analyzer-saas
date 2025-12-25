@@ -10,7 +10,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navLinks = [
   { href: "/pricing", label: "Pricing" },
-  { href: "/api-docs", label: "API Docs" },
+  { href: "/docs", label: "API Docs" },
   { href: "/api-pricing", label: "API Pricing" },
 ];
 
