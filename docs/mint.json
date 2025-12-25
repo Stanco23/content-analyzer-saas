@@ -2,8 +2,8 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "ContentLens API",
   "logo": {
-    "dark": "/logo-dark.svg",
-    "light": "/logo-light.svg"
+    "dark": "https://contentlens.dev/logo-dark.svg",
+    "light": "https://contentlens.dev/logo.svg"
   },
   "favicon": "/favicon.ico",
   "colors": {
@@ -18,11 +18,11 @@
   "topbarLinks": [
     {
       "name": "API Reference",
-      "url": "/docs/api-reference"
+      "url": "/api-reference"
     },
     {
       "name": "Guides",
-      "url": "/docs/guides"
+      "url": "/guides"
     }
   ],
   "topbarCtaButton": {
@@ -33,12 +33,12 @@
     {
       "name": "API Reference",
       "icon": "code",
-      "url": "/docs/api-reference"
+      "url": "/api-reference"
     },
     {
       "name": "Guides",
       "icon": "book",
-      "url": "/docs/guides"
+      "url": "/guides"
     },
     {
       "name": "Support",
@@ -50,36 +50,36 @@
     {
       "group": "Getting Started",
       "pages": [
-        "docs/index",
-        "docs/authentication"
+        "index",
+        "authentication"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "docs/api-reference/index",
+        "api-reference/index",
         {
           "group": "Analyses",
           "pages": [
-            "docs/api-reference/analyses/analyze",
-            "docs/api-reference/analyses/enhance",
-            "docs/api-reference/analyses/list"
+            "api-reference/analyses/analyze",
+            "api-reference/analyses/enhance",
+            "api-reference/analyses/list"
           ]
         },
         {
           "group": "Subscriptions",
           "pages": [
-            "docs/api-reference/subscriptions/overview",
-            "docs/api-reference/subscriptions/checkout",
-            "docs/api-reference/subscriptions/portal",
-            "docs/api-reference/subscriptions/sync",
-            "docs/api-reference/subscriptions/trial"
+            "api-reference/subscriptions/overview",
+            "api-reference/subscriptions/checkout",
+            "api-reference/subscriptions/portal",
+            "api-reference/subscriptions/sync",
+            "api-reference/subscriptions/trial"
           ]
         },
         {
           "group": "User",
           "pages": [
-            "docs/api-reference/user/profile"
+            "api-reference/user/profile"
           ]
         }
       ]
@@ -87,9 +87,9 @@
     {
       "group": "Guides",
       "pages": [
-        "docs/guides/getting-started",
-        "docs/guides/scoring-guide",
-        "docs/guides/version-control"
+        "guides/getting-started",
+        "guides/scoring-guide",
+        "guides/version-control"
       ]
     }
   ],

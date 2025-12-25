@@ -19,6 +19,8 @@ model User {
   analysesCount        Int                @default(0)
   monthlyAnalysesUsed  Int                @default(0)
   lastResetDate        DateTime?
+  trialStartDate       DateTime?
+  trialEndDate         DateTime?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
   analyses             Analysis[]
@@ -53,6 +55,8 @@ model Analysis {
   processingTimeMs   Int?
   createdAt          DateTime @default(now())
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  originalAnalysis   Analysis? @relation("EnhancedVersions", fields: [originalAnalysisId], references: [id], onDelete: SetNull)
+  enhancedAnalyses   Analysis[] @relation("EnhancedVersions")
 
   @@index([userId, createdAt])
   @@index([originalAnalysisId])

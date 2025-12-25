@@ -2,25 +2,35 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db/prisma";
+import Anthropic from '@anthropic-ai/sdk';
+import { analyzeContent } from '@/lib/ai/minimax';
 
 const enhanceSchema = z.object({
+  analysisId: z.string().optional(),
   content: z.string().min(50, "Content must be at least 50 characters").max(50000),
   title: z.string().optional(),
   options: z.object({
     tone: z.enum(['professional', 'casual', 'academic', 'persuasive']).default('professional'),
     goal: z.enum(['improve', 'simplify', 'expand', 'formal', 'casual', 'persuasive', 'seo']).default('improve'),
+    reAnalyze: z.boolean().default(true),
   }).optional(),
 });
 
 // Tier limits
 const TIER_LIMITS = {
   FREE: 5,
-  PRO: 50,
-  BUSINESS: 200,
-  API_STARTER: 100,
-  API_GROWTH: 500,
-  API_ENTERPRISE: 1000,
+  PRO: 500,
+  BUSINESS: 2000,
+  API_STARTER: 0,
+  API_GROWTH: 0,
+  API_ENTERPRISE: 0,
 };
+
+// Initialize Anthropic/MiniMax client
+const client = new Anthropic({
+  apiKey: process.env.MINIMAX_API_KEY!,
+  baseURL: 'https://api.minimax.io/anthropic',
+});
 
 export async function POST(request: Request) {
   try {
@@ -43,8 +53,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check monthly limit
-    const limit = TIER_LIMITS[user.subscriptionTier] || TIER_LIMITS.FREE;
+    // Check monthly limit (enhancements count as analyses)
+    const limit = TIER_LIMITS[user.subscriptionTier as keyof typeof TIER_LIMITS] || TIER_LIMITS.FREE;
 
     // Reset monthly usage if new month
     const now = new Date();
@@ -85,45 +95,100 @@ export async function POST(request: Request) {
       );
     }
 
-    const { content, title, options } = validation.data;
+    const { analysisId, content, title, options } = validation.data;
 
     // Provide defaults for optional options
     const tone = options?.tone || 'professional';
     const goal = options?.goal || 'improve';
+    const reAnalyze = options?.reAnalyze !== false;
 
-    // Generate enhanced content based on options
+    // Build enhancement prompt
     const goalInstructions = {
-      improve: "Improve the overall quality, clarity, and engagement of this content.",
-      simplify: "Simplify the language to make it more accessible and easier to understand.",
-      expand: "Expand the content with more details, examples, and supporting information.",
-      formal: "Make the content more formal and professional in tone.",
-      casual: "Make the content more casual and conversational.",
-      persuasive: "Make the content more persuasive and compelling.",
-      seo: "Optimize the content for search engines while maintaining readability.",
+      improve: "Improve the overall quality, clarity, grammar, and engagement of this content while maintaining the original meaning.",
+      simplify: "Simplify the language to make it more accessible, easier to understand, and clearer for a broader audience.",
+      expand: "Expand the content with more details, examples, supporting information, and depth while maintaining the original message.",
+      formal: "Transform the content to be more formal, professional, and suitable for business or academic contexts.",
+      casual: "Transform the content to be more conversational, friendly, and engaging in a casual tone.",
+      persuasive: "Strengthen the content to be more compelling, persuasive, and actionable for the reader.",
+      seo: "Optimize the content for search engines by naturally integrating relevant keywords while maintaining excellent readability.",
     };
 
-    const enhancementPrompt = `
-You are an expert content editor. Your task is to enhance the following content.
+    const enhancementPrompt = `You are an expert content editor. Your task is to rewrite/enhance the following content.
 
-Goal: ${goalInstructions[goal]}
-Tone: ${tone}
+Instructions:
+- ${goalInstructions[goal]}
+- Tone: ${tone}
+- Respond ONLY with the enhanced content, no explanations, no markdown formatting, no "Here is the enhanced version" text
+- Start directly with the content
 
-Please provide an enhanced version of the content that:
-1. Maintains the original meaning and key messages
-2. Applies the requested goal and tone
-3. Improves clarity, flow, and engagement
-4. Fixes any grammatical or spelling issues
-5. Structures the content for better readability
+Content to enhance:
+${content}`;
 
-Original content:
-${content}
+    // Call MiniMax API for real enhancement
+    const message = await client.messages.create({
+      model: 'MiniMax-M2.1',
+      max_tokens: 16384,
+      messages: [
+        { role: 'user', content: enhancementPrompt },
+      ],
+    });
 
-Respond ONLY with the enhanced content, no explanations or markdown formatting.
-`;
+    // Extract text from response
+    const textBlock = message.content.find(block => block.type === 'text');
+    const enhancedContent = textBlock?.type === 'text' ? textBlock.text : content;
 
-    // Call AI to enhance content (simulated - in production call MiniMax/Anthropic)
-    // For now, we'll create a simulated enhancement
-    const enhancedContent = await enhanceContentWithAI(content, goal, tone);
+    if (!enhancedContent || enhancedContent.trim() === content.trim()) {
+      // If no meaningful change, return original
+      return NextResponse.json({
+        success: true,
+        data: {
+          enhanced_content: content,
+          no_changes: true,
+          message: "Content could not be improved with the selected options",
+        },
+      });
+    }
+
+    // Calculate token usage
+    const tokensUsed = message.usage ? message.usage.input_tokens + message.usage.output_tokens : 0;
+
+    // Run analysis on enhanced content if requested
+    let analysisData = null;
+    if (reAnalyze) {
+      try {
+        analysisData = await analyzeContent({
+          content: enhancedContent,
+          title: title || 'Enhanced Content',
+        });
+      } catch (analysisError) {
+        console.error('Enhanced content analysis failed:', analysisError);
+        // Continue without analysis data
+      }
+    }
+
+    // Create new analysis record for the enhanced version
+    const savedAnalysis = await prisma.analysis.create({
+      data: {
+        userId: user.id,
+        title: title || 'Enhanced Content',
+        content: enhancedContent,
+        wordCount: enhancedContent.split(/\s+/).filter(Boolean).length,
+        isEnhanced: true,
+        originalAnalysisId: analysisId || null,
+        tokensUsed,
+        // Analysis scores from re-analysis
+        readabilityScore: analysisData?.readabilityScore || null,
+        seoScore: analysisData?.seoScore || null,
+        grammarScore: analysisData?.grammarScore || null,
+        accessibilityScore: analysisData?.accessibilityScore || null,
+        engagementScore: analysisData?.engagementScore || null,
+        originalityScore: analysisData?.originalityScore || null,
+        sentimentScore: analysisData?.sentimentScore || null,
+        sourceRelevanceScore: analysisData?.sourceRelevanceScore || null,
+        keywordDensity: analysisData?.keywordDensity || null,
+        processingTimeMs: analysisData?.processing_time_ms || null,
+      },
+    });
 
     // Update usage
     await prisma.user.update({
@@ -137,11 +202,19 @@ Respond ONLY with the enhanced content, no explanations or markdown formatting.
     return NextResponse.json({
       success: true,
       data: {
+        id: savedAnalysis.id,
         enhanced_content: enhancedContent,
-        changes_summary: generateChangesSummary(content, enhancedContent),
         original_length: content.length,
         enhanced_length: enhancedContent.length,
         improvement_percentage: Math.round((enhancedContent.length - content.length) / content.length * 100),
+        tokens_used: tokensUsed,
+        // Analysis results
+        analysis: analysisData ? {
+          readabilityScore: analysisData.readabilityScore,
+          seoScore: analysisData.seoScore,
+          grammarScore: analysisData.grammarScore,
+          engagementScore: analysisData.engagementScore,
+        } : null,
       },
       usage: {
         used: user.monthlyAnalysesUsed + 1,
@@ -162,83 +235,4 @@ Respond ONLY with the enhanced content, no explanations or markdown formatting.
       { status: 500 }
     );
   }
-}
-
-async function enhanceContentWithAI(content: string, goal: string, tone: string): Promise<string> {
-  // In production, this would call the MiniMax API
-  // For now, we'll simulate enhancement
-
-  const enhancements: Record<string, string> = {
-    improve: `Here is an improved version of your content with enhanced clarity and engagement:
-
-${content}
-
-[AI Enhancement Applied: This content has been refined for better readability, flow, and impact while maintaining the original meaning.]`,
-    simplify: `Here is a simplified version of your content:
-
-${content}
-
-[AI Enhancement Applied: The language has been simplified to improve accessibility and understanding.]`,
-    expand: `Here is an expanded version of your content with additional details:
-
-${content}
-
----
-
-## Additional Supporting Information
-
-This section provides expanded context and examples to support the main content above. The original ideas have been elaborated with more depth and supporting details to create a more comprehensive piece.
-
-[AI Enhancement Applied: Content has been expanded with additional context and supporting information.]`,
-    formal: `Here is a more formal version of your content:
-
-${content}
-
-[AI Enhancement Applied: The tone has been adjusted to be more professional and formal.]`,
-    casual: `Here is a more casual version of your content:
-
-${content}
-
-[AI Enhancement Applied: The tone has been adjusted to be more conversational and friendly.]`,
-    persuasive: `Here is a more persuasive version of your content:
-
-${content}
-
-[AI Enhancement Applied: The content has been refined to be more compelling and persuasive.]`,
-    seo: `Here is an SEO-optimized version of your content:
-
-${content}
-
----
-
-**Keywords naturally integrated throughout for SEO optimization.**
-
-[AI Enhancement Applied: Content has been optimized for search engines while maintaining readability.]`,
-  };
-
-  // Simulate AI processing delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  return enhancements[goal] || enhancements.improve;
-}
-
-function generateChangesSummary(original: string, enhanced: string): Array<{ original: string; improved: string; reason: string }> {
-  // In production, this would use diff analysis
-  const changes: Array<{ original: string; improved: string; reason: string }> = [];
-
-  if (enhanced.length > original.length * 1.1) {
-    changes.push({
-      original: "Original length",
-      improved: `${enhanced.length} characters`,
-      reason: "Content expanded with additional details",
-    });
-  }
-
-  changes.push({
-    original: "Original content",
-    improved: "Enhanced version",
-    reason: "Applied tone and goal improvements",
-  });
-
-  return changes;
 }

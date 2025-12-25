@@ -21,7 +21,8 @@ import {
   AlertCircle,
   CheckCircle2,
   ToggleLeft,
-  ToggleRight
+  ToggleRight,
+  RefreshCw
 } from "lucide-react";
 
 interface UserData {
@@ -31,6 +32,7 @@ interface UserData {
   email: string;
   name: string | null;
   createdAt: string;
+  polarCustomerId: string | null;
 }
 
 const tierInfo: Record<string, { color: string; label: string }> = {
@@ -76,11 +78,35 @@ export default function SettingsPage() {
       const data = await res.json();
       if (data.success && data.portalUrl) {
         window.location.href = data.portalUrl;
+      } else {
+        alert(`Failed to open customer portal: ${data.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error("Failed to open customer portal:", error);
+      alert("Failed to open customer portal. Please try again.");
     } finally {
       setOpeningPortal(false);
+    }
+  };
+
+  const handleSyncSubscription = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/polar/sync", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (data.success) {
+        await fetchUserData();
+        alert(`Subscription synced! Tier: ${data.tier || 'None'}, Status: ${data.status || 'None'}`);
+      } else {
+        alert(`Sync failed: ${data.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error("Failed to sync subscription:", error);
+      alert("Failed to sync subscription. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -189,25 +215,46 @@ export default function SettingsPage() {
 
             <Separator />
 
-            <Button
-              onClick={handleManageSubscription}
-              disabled={openingPortal}
-              className="w-full gap-2"
-            >
-              {openingPortal ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Opening...
-                </>
-              ) : (
-                <>
-                  Manage Subscription
-                  <ExternalLink className="h-4 w-4" />
-                </>
-              )}
-            </Button>
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                onClick={handleManageSubscription}
+                disabled={openingPortal}
+                className="gap-2"
+                variant="default"
+              >
+                {openingPortal ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Opening...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="h-4 w-4" />
+                    Manage
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={handleSyncSubscription}
+                disabled={loading}
+                className="gap-2"
+                variant="outline"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Syncing...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-4 w-4" />
+                    Sync
+                  </>
+                )}
+              </Button>
+            </div>
             <p className="text-xs text-muted-foreground text-center">
-              Powered by Polar.sh - Manage invoices, payment methods, and more
+              Manage invoices, payment methods, and subscription via Polar.sh
             </p>
           </CardContent>
         </Card>
