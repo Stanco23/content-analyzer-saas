@@ -8,67 +8,129 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Zap, Sparkles, Building2, Shield, CreditCard, HelpCircle, ArrowRight } from "lucide-react";
 import { PolarCheckoutButton } from "@/components/payments/polar-checkout-button";
 
-const plans = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "/month",
-    description: "Perfect for trying out ContentLens",
-    icon: Zap,
-    features: [
-      "5 analyses per month",
-      "Basic SEO analysis",
-      "Readability scores",
-      "Email support",
-      "7-day analysis history",
-    ],
-    cta: "Get Started",
-    href: "/sign-up",
-    popular: false,
-  },
-  {
-    name: "Pro",
-    price: "$19",
-    period: "/month",
-    description: "For content creators and marketers who need more",
-    icon: Sparkles,
-    features: [
-      "50 analyses per month",
-      "Advanced SEO analysis",
-      "Keyword suggestions",
-      "Priority email support",
-      "Unlimited analysis history",
-      "Export reports (PDF)",
-      "Content suggestions",
-    ],
-    cta: "Subscribe Now",
-    tier: "PRO",
-    popular: true,
-  },
-  {
-    name: "Business",
-    price: "$49",
-    period: "/month",
-    description: "For teams and agencies with advanced needs",
-    icon: Building2,
-    features: [
-      "200 analyses per month",
-      "Everything in Pro",
-      "Team access (up to 5 users)",
-      "Custom branding",
-      "API access (1,000 calls/mo)",
-      "Webhook integrations",
-      "Dedicated support",
-      "SSO authentication",
-    ],
-    cta: "Subscribe Now",
-    tier: "BUSINESS",
-    popular: false,
-  },
-];
+const plans = {
+  monthly: [
+    {
+      name: "Free",
+      price: "$0",
+      period: "/month",
+      description: "Perfect for trying out ContentLens",
+      icon: Zap,
+      features: [
+        "5 analyses per month",
+        "Basic SEO analysis",
+        "Readability scores",
+        "Email support",
+        "7-day analysis history",
+      ],
+      cta: "Get Started",
+      href: "/sign-up",
+      popular: false,
+    },
+    {
+      name: "Pro",
+      price: "$19",
+      period: "/month",
+      description: "For content creators and marketers who need more",
+      icon: Sparkles,
+      features: [
+        "500 analyses per month",
+        "Advanced SEO analysis",
+        "Keyword suggestions",
+        "Priority email support",
+        "Unlimited analysis history",
+        "Export reports (PDF)",
+        "Content suggestions",
+      ],
+      cta: "Subscribe Now",
+      tier: "PRO_MONTHLY",
+      popular: true,
+    },
+    {
+      name: "Business",
+      price: "$49",
+      period: "/month",
+      description: "For teams and agencies with advanced needs",
+      icon: Building2,
+      features: [
+        "2,000 analyses per month",
+        "Everything in Pro",
+        "Team access (up to 5 users)",
+        "Custom branding",
+        "API access (1,000 calls/mo)",
+        "Webhook integrations",
+        "Dedicated support",
+        "SSO authentication",
+      ],
+      cta: "Subscribe Now",
+      tier: "BUSINESS_MONTHLY",
+      popular: false,
+    },
+  ],
+  annual: [
+    {
+      name: "Free",
+      price: "$0",
+      period: "/year",
+      description: "Perfect for trying out ContentLens",
+      icon: Zap,
+      features: [
+        "60 analyses per year",
+        "Basic SEO analysis",
+        "Readability scores",
+        "Email support",
+        "7-day analysis history",
+      ],
+      cta: "Get Started",
+      href: "/sign-up",
+      popular: false,
+    },
+    {
+      name: "Pro",
+      price: "$159",
+      period: "/year",
+      description: "For content creators and marketers who need more",
+      icon: Sparkles,
+      features: [
+        "6,000 analyses per year",
+        "Advanced SEO analysis",
+        "Keyword suggestions",
+        "Priority email support",
+        "Unlimited analysis history",
+        "Export reports (PDF)",
+        "Content suggestions",
+        "2 months free",
+      ],
+      cta: "Subscribe Now",
+      tier: "PRO_ANNUAL",
+      popular: true,
+    },
+    {
+      name: "Business",
+      price: "$399",
+      period: "/year",
+      description: "For teams and agencies with advanced needs",
+      icon: Building2,
+      features: [
+        "24,000 analyses per year",
+        "Everything in Pro",
+        "Team access (up to 5 users)",
+        "Custom branding",
+        "API access (12,000 calls/yr)",
+        "Webhook integrations",
+        "Dedicated support",
+        "SSO authentication",
+        "2 months free",
+      ],
+      cta: "Subscribe Now",
+      tier: "BUSINESS_ANNUAL",
+      popular: false,
+    },
+  ],
+};
 
 const comparisonFeatures = [
-  { name: "Monthly Analyses", free: "5", pro: "50", business: "200" },
+  { name: "Monthly Analyses", free: "5", pro: "500", business: "2,000" },
   { name: "SEO Analysis", free: "Basic", pro: "Advanced", business: "Advanced +" },
   { name: "Readability Scores", free: true, pro: true, business: true },
   { name: "Keyword Suggestions", free: false, pro: true, business: true },
@@ -110,6 +172,9 @@ const faqs = [
 ];
 
 export default function PricingPage() {
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
+  const currentPlans = plans[billingPeriod];
+
   return (
     <div className="min-h-screen bg-background">
       <div className="pt-24 pb-16">
@@ -127,9 +192,38 @@ export default function PricingPage() {
             </p>
           </div>
 
+          {/* Billing Period Toggle */}
+          <div className="flex justify-center mb-12">
+            <div className="inline-flex items-center bg-muted rounded-full p-1">
+              <button
+                onClick={() => setBillingPeriod("monthly")}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                  billingPeriod === "monthly"
+                    ? "bg-primary text-primary-foreground shadow"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                onClick={() => setBillingPeriod("annual")}
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                  billingPeriod === "annual"
+                    ? "bg-primary text-primary-foreground shadow"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Annual
+                <Badge variant="secondary" className="ml-2 bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">
+                  Save 30%
+                </Badge>
+              </button>
+            </div>
+          </div>
+
           {/* Pricing Cards */}
           <div className="grid md:grid-cols-3 gap-6 mb-20">
-            {plans.map((plan) => (
+            {currentPlans.map((plan) => (
               <Card
                 key={plan.name}
                 className={`relative flex flex-col transition-all duration-300 hover:shadow-xl ${
@@ -159,6 +253,11 @@ export default function PricingPage() {
                   <div className="text-center mb-6">
                     <span className="text-4xl font-bold">{plan.price}</span>
                     <span className="text-muted-foreground">{plan.period}</span>
+                    {billingPeriod === "annual" && plan.price !== "$0" && (
+                      <p className="text-sm text-emerald-600 mt-1">
+                        {Math.round((1 - (parseInt(plan.price.replace("$", "")) / (parseInt(plan.price.replace("$", "")) * 12))) * 100)}% savings
+                      </p>
+                    )}
                   </div>
                   <ul className="space-y-3 mb-6 flex-1">
                     {plan.features.map((feature) => (

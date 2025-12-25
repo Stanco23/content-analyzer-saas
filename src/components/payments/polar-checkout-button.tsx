@@ -29,7 +29,8 @@ export function PolarCheckoutButton({ tier, children, variant = "default", class
       if (data.success && data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
       } else {
-        console.error("Checkout failed:", data.error);
+        console.error("Checkout failed:", data.error, data.details);
+        alert(`Checkout failed: ${data.error || 'Unknown error'}\n${data.details || ''}`);
       }
     } catch (error) {
       console.error("Checkout error:", error);

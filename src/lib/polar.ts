@@ -1,31 +1,37 @@
 // Polar.sh integration for Content Analyzer SaaS
 // Documentation: https://polar.sh/docs
 
+// Organization ID is required for checkout sessions
+const POLAR_ORG_ID = process.env.POLAR_ORGANIZATION_ID;
+
 export const POLAR_PRODUCTS = {
-  PRO: process.env.POLAR_PRODUCT_PRO!,
-  BUSINESS: process.env.POLAR_PRODUCT_BUSINESS!,
+  PRO_MONTHLY: process.env.POLAR_PRODUCT_PRO_MONTHLY!,
+  PRO_ANNUAL: process.env.POLAR_PRODUCT_PRO_ANNUAL!,
+  BUSINESS_MONTHLY: process.env.POLAR_PRODUCT_BUSINESS_MONTHLY!,
+  BUSINESS_ANNUAL: process.env.POLAR_PRODUCT_BUSINESS_ANNUAL!,
   API_STARTER: process.env.POLAR_PRODUCT_API_STARTER!,
   API_GROWTH: process.env.POLAR_PRODUCT_API_GROWTH!,
   API_ENTERPRISE: process.env.POLAR_PRODUCT_API_ENTERPRISE!,
 } as const;
 
-export const TIER_TO_PRODUCT = {
-  PRO: process.env.POLAR_PRODUCT_PRO!,
-  BUSINESS: process.env.POLAR_PRODUCT_BUSINESS!,
+export const TIER_TO_PRODUCT: Record<string, string> = {
+  PRO_MONTHLY: process.env.POLAR_PRODUCT_PRO_MONTHLY!,
+  PRO_ANNUAL: process.env.POLAR_PRODUCT_PRO_ANNUAL!,
+  BUSINESS_MONTHLY: process.env.POLAR_PRODUCT_BUSINESS_MONTHLY!,
+  BUSINESS_ANNUAL: process.env.POLAR_PRODUCT_BUSINESS_ANNUAL!,
   API_STARTER: process.env.POLAR_PRODUCT_API_STARTER!,
   API_GROWTH: process.env.POLAR_PRODUCT_API_GROWTH!,
   API_ENTERPRISE: process.env.POLAR_PRODUCT_API_ENTERPRISE!,
-} as const;
+};
 
 export function getPolarEnvironment(): 'sandbox' | 'production' {
   return process.env.POLAR_ENVIRONMENT === 'production' ? 'production' : 'sandbox';
 }
 
 export function getPolarApiUrl(): string {
-  const baseUrl = getPolarEnvironment() === 'production'
-    ? 'https://api.polar.sh'
-    : 'https://sandbox-api.polar.sh';
-  return baseUrl;
+  const isProd = process.env.POLAR_ENVIRONMENT === 'production';
+  // Polar sandbox uses a different URL
+  return isProd ? 'https://api.polar.sh/v1' : 'https://sandbox-api.polar.sh/v1';
 }
 
 export interface PolarCustomer {
@@ -47,8 +53,13 @@ export interface PolarSubscription {
 }
 
 export interface PolarCheckout {
-  url: string;
   id: string;
+  url: string;
+  status: string;
+  client_secret?: string;
+  expires_at: string;
+  amount: number;
+  currency: string;
 }
 
 export interface PolarPortalSession {
@@ -61,12 +72,21 @@ export class PolarAPI {
   private apiUrl: string;
 
   constructor() {
-    this.apiKey = process.env.POLAR_API_KEY!;
+    this.apiKey = process.env.POLAR_API_KEY || '';
     this.apiUrl = getPolarApiUrl();
+    console.log('Polar API initialized:', {
+      url: this.apiUrl,
+      hasKey: !!this.apiKey,
+      hasOrgId: !!POLAR_ORG_ID,
+      env: process.env.POLAR_ENVIRONMENT,
+    });
   }
 
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const response = await fetch(`${this.apiUrl}${endpoint}`, {
+    const url = `${this.apiUrl}${endpoint}`;
+    console.log('Polar API request:', { method: options.method || 'GET', url });
+
+    const response = await fetch(url, {
       ...options,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
@@ -77,6 +97,7 @@ export class PolarAPI {
 
     if (!response.ok) {
       const error = await response.text();
+      console.error('Polar API error:', { status: response.status, error, url });
       throw new Error(`Polar API error: ${response.status} ${error}`);
     }
 
@@ -84,14 +105,14 @@ export class PolarAPI {
   }
 
   async createCustomer(email: string): Promise<PolarCustomer> {
-    return this.request<PolarCustomer>('/v1/customers', {
+    return this.request<PolarCustomer>('/customers', {
       method: 'POST',
       body: JSON.stringify({ email }),
     });
   }
 
   async getCustomer(customerId: string): Promise<PolarCustomer> {
-    return this.request<PolarCustomer>(`/v1/customers/${customerId}`);
+    return this.request<PolarCustomer>(`/customers/${customerId}`);
   }
 
   async createCheckoutSession(params: {
@@ -101,14 +122,17 @@ export class PolarAPI {
     cancel_url?: string;
     customer_email?: string;
   }): Promise<PolarCheckout> {
-    return this.request<PolarCheckout>('/v1/checkout/sessions', {
+    const body = POLAR_ORG_ID
+      ? { ...params, organization_id: POLAR_ORG_ID }
+      : params;
+    return this.request<PolarCheckout>('/checkouts', {
       method: 'POST',
-      body: JSON.stringify(params),
+      body: JSON.stringify(body),
     });
   }
 
   async createPortalSession(customerId: string, returnUrl: string): Promise<PolarPortalSession> {
-    return this.request<PolarPortalSession>('/v1/customers/portal-sessions', {
+    return this.request<PolarPortalSession>('/customers/portal-sessions', {
       method: 'POST',
       body: JSON.stringify({
         customer_id: customerId,
@@ -118,17 +142,17 @@ export class PolarAPI {
   }
 
   async getSubscription(subscriptionId: string): Promise<PolarSubscription> {
-    return this.request<PolarSubscription>(`/v1/subscriptions/${subscriptionId}`);
+    return this.request<PolarSubscription>(`/subscriptions/${subscriptionId}`);
   }
 
   async cancelSubscription(subscriptionId: string): Promise<PolarSubscription> {
-    return this.request<PolarSubscription>(`/v1/subscriptions/${subscriptionId}/cancel`, {
+    return this.request<PolarSubscription>(`/subscriptions/${subscriptionId}/cancel`, {
       method: 'POST',
     });
   }
 
   async reactivateSubscription(subscriptionId: string): Promise<PolarSubscription> {
-    return this.request<PolarSubscription>(`/v1/subscriptions/${subscriptionId}/reactivate`, {
+    return this.request<PolarSubscription>(`/subscriptions/${subscriptionId}/reactivate`, {
       method: 'POST',
     });
   }

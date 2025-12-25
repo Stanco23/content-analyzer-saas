@@ -21,11 +21,18 @@ interface PolarWebhookPayload {
 
 function tierFromProductId(productId: string): string | null {
   const env = process.env;
-  if (productId === env.POLAR_PRODUCT_PRO) return 'PRO';
-  if (productId === env.POLAR_PRODUCT_BUSINESS) return 'BUSINESS';
+  // Monthly products
+  if (productId === env.POLAR_PRODUCT_PRO_MONTHLY) return 'PRO';
+  if (productId === env.POLAR_PRODUCT_BUSINESS_MONTHLY) return 'BUSINESS';
+  // Annual products
+  if (productId === env.POLAR_PRODUCT_PRO_ANNUAL) return 'PRO';
+  if (productId === env.POLAR_PRODUCT_BUSINESS_ANNUAL) return 'BUSINESS';
+  // API products
   if (productId === env.POLAR_PRODUCT_API_STARTER) return 'API_STARTER';
   if (productId === env.POLAR_PRODUCT_API_GROWTH) return 'API_GROWTH';
   if (productId === env.POLAR_PRODUCT_API_ENTERPRISE) return 'API_ENTERPRISE';
+  // API annual products
+  if (productId === env.POLAR_PRODUCT_API_GROWTH_ANNUAL) return 'API_GROWTH';
   return null;
 }
 
@@ -86,7 +93,7 @@ export async function POST(req: NextRequest) {
   const eventType = evt.type;
   const data = evt.data;
 
-  console.log(`Processing Polar webhook: ${eventType}`);
+  console.log(`Processing Polar webhook: ${eventType}`, JSON.stringify(data, null, 2));
 
   try {
     switch (eventType) {
