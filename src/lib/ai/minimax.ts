@@ -34,7 +34,7 @@ export async function analyzeContent({ content, title, options = {} }: AnalyzeCo
     // Use Anthropic SDK as recommended in the docs
     const message = await client.messages.create({
       model: config.model,
-      max_tokens: 4096,
+      max_tokens: 8192, // Increased for enhanced content
       system: SYSTEM_PROMPT,
       messages: [
         { role: 'user', content: prompt },
@@ -55,13 +55,42 @@ export async function analyzeContent({ content, title, options = {} }: AnalyzeCo
     // Get usage statistics from the response
     const tokensUsed = message.usage ? message.usage.input_tokens + message.usage.output_tokens : estimateTokens(content + prompt);
 
+    // Calculate overall scores
+    const readabilityScore = analysisData.readability?.score || 0;
+    const seoScore = analysisData.seo?.score || 0;
+    const grammarScore = analysisData.grammar?.score || null;
+    const accessibilityScore = analysisData.accessibility?.score || null;
+    const engagementScore = analysisData.engagement?.score || null;
+    const originalityScore = analysisData.originality?.score || null;
+    const sentimentScore = analysisData.sentiment ? ((analysisData.sentiment.score + 1) / 2) * 100 : null;
+    const sourceRelevanceScore = analysisData.source_relevance?.score || null;
+
     return {
       id: `analysis_${crypto.randomUUID()}`,
       word_count: wordCount,
       character_count: characterCount,
       readability: analysisData.readability,
       seo: analysisData.seo,
+      grammar: analysisData.grammar,
+      accessibility: analysisData.accessibility,
+      engagement: analysisData.engagement,
+      originality: analysisData.originality,
+      sentiment: analysisData.sentiment,
+      source_relevance: analysisData.source_relevance,
+      enhancements: analysisData.enhancements,
       suggestions: analysisData.suggestions,
+      // Legacy fields for compatibility
+      readabilityScore,
+      seoScore,
+      sentimentScore,
+      gradeLevel: analysisData.readability?.grade_level || null,
+      keywordDensity: analysisData.seo?.keyword_density || {},
+      // New score fields
+      grammarScore,
+      accessibilityScore,
+      engagementScore,
+      originalityScore,
+      sourceRelevanceScore,
       tokens_used: tokensUsed,
       processing_time_ms: processingTimeMs,
     };

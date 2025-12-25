@@ -11,19 +11,20 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const limit = parseInt(searchParams.get("limit") || "50");
+  const id = searchParams.get("id");
+
+  // If ID is provided, fetch single analysis
+  if (id) {
+    const analysis = await prisma.analysis.findFirst({
+      where: { id, userId: user.id },
+    });
+    return NextResponse.json({ success: true, data: analysis ? [analysis] : [] });
+  }
 
   const analyses = await prisma.analysis.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
     take: limit,
-    select: {
-      id: true,
-      title: true,
-      wordCount: true,
-      readabilityScore: true,
-      seoScore: true,
-      createdAt: true,
-    },
   });
 
   return NextResponse.json({ success: true, data: analyses });

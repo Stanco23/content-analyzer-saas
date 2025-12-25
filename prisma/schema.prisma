@@ -31,21 +31,31 @@ model User {
 }
 
 model Analysis {
-  id               String   @id @default(cuid())
-  userId           String
-  title            String
-  content          String
-  wordCount        Int
-  readabilityScore Float?
-  seoScore         Float?
-  keywordDensity   Json?
-  suggestions      Json?
-  tokensUsed       Int      @default(0)
-  processingTimeMs Int?
-  createdAt        DateTime @default(now())
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String   @id @default(cuid())
+  userId             String
+  title              String
+  content            String
+  wordCount          Int
+  readabilityScore   Float?
+  seoScore           Float?
+  grammarScore       Float?
+  accessibilityScore Float?
+  engagementScore    Float?
+  originalityScore   Float?
+  sentimentScore     Float?
+  sourceRelevanceScore Float?
+  keywordDensity     Json?
+  suggestions        Json?
+  enhancedContent    String?
+  isEnhanced         Boolean  @default(false)
+  originalAnalysisId String?
+  tokensUsed         Int      @default(0)
+  processingTimeMs   Int?
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+  @@index([originalAnalysisId])
 }
 
 model ApiKey {

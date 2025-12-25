@@ -11,7 +11,15 @@ const analyzeSchema = z.object({
     include_keywords: z.boolean().default(true),
     include_readability: z.boolean().default(true),
     include_seo: z.boolean().default(true),
+    include_grammar: z.boolean().default(true),
+    include_accessibility: z.boolean().default(true),
+    include_engagement: z.boolean().default(true),
+    include_originality: z.boolean().default(true),
+    include_sentiment: z.boolean().default(true),
+    include_enhancements: z.boolean().default(true),
     keyword_focus: z.string().optional(),
+    source_context: z.string().optional(),
+    enhancement_tone: z.enum(['professional', 'casual', 'academic', 'persuasive']).optional(),
   }).optional(),
 });
 
@@ -101,14 +109,21 @@ export async function POST(request: Request) {
         title: title || "Untitled",
         content,
         wordCount: result.word_count,
-        readabilityScore: result.readability?.score || 0,
-        seoScore: result.seo?.score || 0,
-        keywordDensity: result.seo?.keyword_density || {},
+        readabilityScore: result.readabilityScore,
+        seoScore: result.seoScore,
+        grammarScore: result.grammarScore,
+        accessibilityScore: result.accessibilityScore,
+        engagementScore: result.engagementScore,
+        originalityScore: result.originalityScore,
+        sentimentScore: result.sentimentScore,
+        sourceRelevanceScore: result.sourceRelevanceScore,
+        keywordDensity: result.keywordDensity || {},
         suggestions: result.suggestions || [],
+        enhancedContent: result.enhancements?.improved_content || null,
         tokensUsed: result.tokens_used,
         processingTimeMs: result.processing_time_ms,
       },
-    } as any);
+    });
 
     // Update usage
     await prisma.user.update({
