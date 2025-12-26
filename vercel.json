@@ -37,6 +37,18 @@
       "destination": "https://vssh.mintlify.app/:path*"
     },
     {
+      "source": "/api-reference/:path*",
+      "destination": "https://vssh.mintlify.app/api-reference/:path*"
+    },
+    {
+      "source": "/guides/:path*",
+      "destination": "https://vssh.mintlify.app/guides/:path*"
+    },
+    {
+      "source": "/authentication",
+      "destination": "https://vssh.mintlify.app/authentication"
+    },
+    {
       "source": "/mintlify-assets/:path*",
       "destination": "https://vssh.mintlify.app/mintlify-assets/:path*"
     }
