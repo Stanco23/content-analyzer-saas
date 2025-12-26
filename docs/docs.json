@@ -7,6 +7,11 @@
   },
   "favicon": "/favicon.ico",
   "theme": "mint",
+  "colors": {
+    "primary": "#312e81",
+    "light": "#4f46e5",
+    "dark": "#312e81"
+  },
   "topbarLinks": [
     {
       "name": "Documentation",
@@ -42,36 +47,36 @@
     {
       "group": "Getting Started",
       "pages": [
-        "index",
-        "authentication"
+        "index.md",
+        "authentication.md"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "api-reference/index",
+        "api-reference/index.md",
         {
           "group": "Content Analysis",
           "pages": [
-            "api-reference/analyses/analyze",
-            "api-reference/analyses/enhance",
-            "api-reference/analyses/list"
+            "api-reference/analyses/analyze.md",
+            "api-reference/analyses/enhance.md",
+            "api-reference/analyses/list.md"
           ]
         },
         {
           "group": "Subscriptions",
           "pages": [
-            "api-reference/subscriptions/overview",
-            "api-reference/subscriptions/checkout",
-            "api-reference/subscriptions/portal",
-            "api-reference/subscriptions/sync",
-            "api-reference/subscriptions/trial"
+            "api-reference/subscriptions/overview.md",
+            "api-reference/subscriptions/checkout.md",
+            "api-reference/subscriptions/portal.md",
+            "api-reference/subscriptions/sync.md",
+            "api-reference/subscriptions/trial.md"
           ]
         },
         {
           "group": "User",
           "pages": [
-            "api-reference/user/profile"
+            "api-reference/user/profile.md"
           ]
         }
       ]
@@ -79,9 +84,9 @@
     {
       "group": "Guides",
       "pages": [
-        "guides/getting-started",
-        "guides/scoring-guide",
-        "guides/version-control"
+        "guides/getting-started.md",
+        "guides/scoring-guide.md",
+        "guides/version-control.md"
       ]
     }
   ],
