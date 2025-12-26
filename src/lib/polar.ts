@@ -132,7 +132,7 @@ export class PolarAPI {
   }
 
   async createPortalSession(customerId: string, returnUrl: string): Promise<PolarPortalSession> {
-    return this.request<PolarPortalSession>('/customers/portal-sessions', {
+    return this.request<PolarPortalSession>('/customer-portal-sessions', {
       method: 'POST',
       body: JSON.stringify({
         customer_id: customerId,
