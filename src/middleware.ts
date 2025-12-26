@@ -8,6 +8,7 @@ const isPublicRoute = createRouteMatcher([
   '/api-docs(.*)',
   '/api-pricing(.*)',
   '/blog(.*)',
+  '/docs(.*)',
   '/api/v1/(.*)',
   '/api/webhooks/(.*)',
 ]);
