@@ -169,6 +169,6 @@ if url:
 
 ## See Also
 
-- [Create Checkout](/docs/api-reference/subscriptions/checkout) - Purchase subscription
-- [Sync Subscription](/docs/api-reference/subscriptions/sync) - Check subscription status
-- [Trial Endpoint](/docs/api-reference/subscriptions/trial) - Start free trial
+- [Create Checkout](/api-reference/subscriptions/checkout) - Purchase subscription
+- [Sync Subscription](/api-reference/subscriptions/sync) - Check subscription status
+- [Trial Endpoint](/api-reference/subscriptions/trial) - Start free trial

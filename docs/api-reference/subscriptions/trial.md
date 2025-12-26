@@ -215,6 +215,6 @@ if status["isEligibleForTrial"]:
 
 ## See Also
 
-- [Create Checkout](/docs/api-reference/subscriptions/checkout) - Upgrade after trial
-- [Customer Portal](/docs/api-reference/subscriptions/portal) - Manage subscription
-- [Sync Subscription](/docs/api-reference/subscriptions/sync) - Check subscription status
+- [Create Checkout](/api-reference/subscriptions/checkout) - Upgrade after trial
+- [Customer Portal](/api-reference/subscriptions/portal) - Manage subscription
+- [Sync Subscription](/api-reference/subscriptions/sync) - Check subscription status

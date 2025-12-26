@@ -163,6 +163,6 @@ A weighted average of all individual scores:
 
 ## Next Steps
 
-- [Analyze Content](/docs/api-reference/analyses/analyze) - Start analyzing
-- [Enhance Content](/docs/api-reference/analyses/enhance) - Improve your content
-- [API Reference](/docs/api-reference) - Full endpoint documentation
+- [Analyze Content](/api-reference/analyses/analyze) - Start analyzing
+- [Enhance Content](/api-reference/analyses/enhance) - Improve your content
+- [API Reference](/api-reference) - Full endpoint documentation

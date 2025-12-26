@@ -161,6 +161,6 @@ print(f"Status: {subscription['status']}")
 
 ## See Also
 
-- [Create Checkout](/docs/api-reference/subscriptions/checkout) - Purchase subscription
-- [Customer Portal](/docs/api-reference/subscriptions/portal) - Manage subscription
-- [Trial Endpoint](/docs/api-reference/subscriptions/trial) - Start free trial
+- [Create Checkout](/api-reference/subscriptions/checkout) - Purchase subscription
+- [Customer Portal](/api-reference/subscriptions/portal) - Manage subscription
+- [Trial Endpoint](/api-reference/subscriptions/trial) - Start free trial

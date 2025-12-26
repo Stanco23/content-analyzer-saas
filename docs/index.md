@@ -61,15 +61,15 @@ We follow semantic versioning for our API. Breaking changes will be introduced w
 
 ## Getting Help
 
-- **Guides** → Step-by-step tutorials [→](/docs/guides)
-- **API Reference** → Complete endpoint documentation [→](/docs/api-reference)
-- **Support** → Get help with integration [→](/docs/support)
+- **Guides** → Step-by-step tutorials [→](/guides)
+- **API Reference** → Complete endpoint documentation [→](/api-reference)
+- **Support** → Get help with integration [→](/support)
 
 ---
 
 ## Next Steps
 
-1. [Authentication Guide](/docs/authentication) - Learn how to authenticate your requests
-2. [Analyze Endpoint](/docs/api-reference/analyses/analyze) - Start analyzing content
-3. [Enhance Endpoint](/docs/api-reference/analyses/enhance) - Improve your content
-4. [Subscription Guide](/docs/api-reference/subscriptions/overview) - Manage your plan
+1. [Authentication Guide](/authentication) - Learn how to authenticate your requests
+2. [Analyze Endpoint](/api-reference/analyses/analyze) - Start analyzing content
+3. [Enhance Endpoint](/api-reference/analyses/enhance) - Improve your content
+4. [Subscription Guide](/api-reference/subscriptions/overview) - Manage your plan

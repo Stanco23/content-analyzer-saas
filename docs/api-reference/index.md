@@ -10,24 +10,24 @@ Complete reference documentation for the ContentLens API.
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| [Analyze](/docs/api-reference/analyses/analyze) | `POST` | Analyze content for quality metrics |
-| [Enhance](/docs/api-reference/analyses/enhance) | `POST` | Improve/rewrite content with AI |
-| [List Analyses](/docs/api-reference/analyses/list) | `GET` | Retrieve user's analysis history |
+| [Analyze](/api-reference/analyses/analyze) | `POST` | Analyze content for quality metrics |
+| [Enhance](/api-reference/analyses/enhance) | `POST` | Improve/rewrite content with AI |
+| [List Analyses](/api-reference/analyses/list) | `GET` | Retrieve user's analysis history |
 
 ### Subscriptions
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| [Create Checkout](/docs/api-reference/subscriptions/checkout) | `POST` | Create a checkout session |
-| [Customer Portal](/docs/api-reference/subscriptions/portal) | `POST` | Get customer portal URL |
-| [Sync Subscription](/docs/api-reference/subscriptions/sync) | `POST` | Sync subscription from Polar |
-| [Trial](/docs/api-reference/subscriptions/trial) | `GET/POST` | Start or check trial status |
+| [Create Checkout](/api-reference/subscriptions/checkout) | `POST` | Create a checkout session |
+| [Customer Portal](/api-reference/subscriptions/portal) | `POST` | Get customer portal URL |
+| [Sync Subscription](/api-reference/subscriptions/sync) | `POST` | Sync subscription from Polar |
+| [Trial](/api-reference/subscriptions/trial) | `GET/POST` | Start or check trial status |
 
 ### User
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| [Get Profile](/docs/api-reference/user/profile) | `GET` | Get current user profile |
+| [Get Profile](/api-reference/user/profile) | `GET` | Get current user profile |
 
 ---
 
@@ -52,7 +52,7 @@ All API endpoints require authentication using Clerk JWT tokens. Include the tok
 Authorization: Bearer <your-jwt-token>
 ```
 
-[Learn more about authentication →](/docs/authentication)
+[Learn more about authentication →](/authentication)
 
 ---
 
@@ -124,6 +124,6 @@ List endpoints support pagination via query parameters:
 
 ## Next Steps
 
-- [Analyze Endpoint](/docs/api-reference/analyses/analyze) - Start analyzing content
-- [Enhance Endpoint](/docs/api-reference/analyses/enhance) - Improve your content
-- [Authentication Guide](/docs/authentication) - Set up authentication
+- [Analyze Endpoint](/api-reference/analyses/analyze) - Start analyzing content
+- [Enhance Endpoint](/api-reference/analyses/enhance) - Improve your content
+- [Authentication Guide](/authentication) - Set up authentication

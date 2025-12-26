@@ -21,10 +21,10 @@ Manage subscriptions, checkouts, and trials using Polar's payment integration.
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| [Create Checkout](/docs/api-reference/subscriptions/checkout) | `POST` | Create checkout session |
-| [Customer Portal](/docs/api-reference/subscriptions/portal) | `POST` | Manage subscription |
-| [Sync Subscription](/docs/api-reference/subscriptions/sync) | `POST` | Fetch latest subscription |
-| [Trial](/docs/api-reference/subscriptions/trial) | `GET/POST` | Start or check trial |
+| [Create Checkout](/api-reference/subscriptions/checkout) | `POST` | Create checkout session |
+| [Customer Portal](/api-reference/subscriptions/portal) | `POST` | Manage subscription |
+| [Sync Subscription](/api-reference/subscriptions/sync) | `POST` | Fetch latest subscription |
+| [Trial](/api-reference/subscriptions/trial) | `GET/POST` | Start or check trial |
 
 ---
 
@@ -44,6 +44,6 @@ Subscribe to webhook events for real-time subscription updates:
 
 ## See Also
 
-- [Checkout Endpoint](/docs/api-reference/subscriptions/checkout)
-- [Customer Portal](/docs/api-reference/subscriptions/portal)
-- [Webhook Setup](/docs/guides/webhooks)
+- [Checkout Endpoint](/api-reference/subscriptions/checkout)
+- [Customer Portal](/api-reference/subscriptions/portal)
+- [Webhook Setup](/guides/webhooks)

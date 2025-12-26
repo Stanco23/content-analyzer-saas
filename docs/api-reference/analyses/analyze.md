@@ -219,6 +219,6 @@ def analyze_content(content, title=None):
 
 ## See Also
 
-- [Enhance Content](/docs/api-reference/analyses/enhance) - Improve your content
-- [List Analyses](/docs/api-reference/analyses/list) - Get analysis history
-- [Scoring Guide](/docs/guides/scoring-guide) - Understanding scores
+- [Enhance Content](/api-reference/analyses/enhance) - Improve your content
+- [List Analyses](/api-reference/analyses/list) - Get analysis history
+- [Scoring Guide](/guides/scoring-guide) - Understanding scores

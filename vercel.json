@@ -1,28 +1,44 @@
 {
   "rewrites": [
     {
+      "source": "/_mintlify/:path*",
+      "destination": "https://vssh.mintlify.app/_mintlify/:path*"
+    },
+    {
+      "source": "/api/request",
+      "destination": "https://vssh.mintlify.app/_mintlify/api/request"
+    },
+    {
       "source": "/docs",
       "destination": "https://vssh.mintlify.app/docs"
+    },
+    {
+      "source": "/docs/llms.txt",
+      "destination": "https://vssh.mintlify.app/llms.txt"
+    },
+    {
+      "source": "/docs/llms-full.txt",
+      "destination": "https://vssh.mintlify.app/llms-full.txt"
+    },
+    {
+      "source": "/docs/sitemap.xml",
+      "destination": "https://vssh.mintlify.app/sitemap.xml"
+    },
+    {
+      "source": "/docs/robots.txt",
+      "destination": "https://vssh.mintlify.app/robots.txt"
+    },
+    {
+      "source": "/docs/mcp",
+      "destination": "https://vssh.mintlify.app/mcp"
     },
     {
       "source": "/docs/:path*",
       "destination": "https://vssh.mintlify.app/docs/:path*"
     },
     {
-      "source": "/mintlify-assets/:path*",
-      "destination": "https://vssh.mintlify.app/mintlify-assets/:path*"
-    },
-    {
-      "source": "/_next/:path*",
-      "destination": "https://vssh.mintlify.app/_next/:path*"
-    },
-    {
-      "source": "/_mintlify/:path*",
-      "destination": "https://vssh.mintlify.app/_mintlify/:path*"
-    },
-    {
-      "source": "/sitemap.xml",
-      "destination": "https://vssh.mintlify.app/sitemap.xml"
+      "source": "/mintlify-assets/:path+",
+      "destination": "https://vssh.mintlify.app/mintlify-assets/:path+"
     }
   ]
 }

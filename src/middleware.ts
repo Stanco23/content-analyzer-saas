@@ -14,6 +14,7 @@ const isPublicRoute = createRouteMatcher([
   '/_mintlify/(.*)',
   '/api/v1/(.*)',
   '/api/webhooks/(.*)',
+  '/api/request(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
