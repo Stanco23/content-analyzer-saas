@@ -39,6 +39,9 @@ const tierInfo: Record<string, { color: string; label: string }> = {
   FREE: { color: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300", label: "Free Plan" },
   PRO: { color: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400", label: "Pro Plan" },
   BUSINESS: { color: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400", label: "Business Plan" },
+  API_STARTER: { color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400", label: "API Starter" },
+  API_GROWTH: { color: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400", label: "API Growth" },
+  API_ENTERPRISE: { color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400", label: "API Enterprise" },
 };
 
 export default function SettingsPage() {
@@ -218,7 +221,7 @@ export default function SettingsPage() {
             <div className="grid grid-cols-2 gap-3">
               <Button
                 onClick={handleManageSubscription}
-                disabled={openingPortal}
+                disabled={openingPortal || !userData?.polarCustomerId}
                 className="gap-2"
                 variant="default"
               >

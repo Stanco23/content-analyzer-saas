@@ -20,7 +20,7 @@
     "primary": {
       "type": "button",
       "label": "Get API Key",
-      "href": "https://contentlens.dev/dashboard"
+      "href": "https://contentlens.vssh.dev/dashboard"
     }
   },
   "navigation": {

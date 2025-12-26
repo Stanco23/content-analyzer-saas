@@ -388,6 +388,26 @@ export default function PricingPage() {
           </div>
 
           {/* FAQ Section */}
+          {/* API Pricing Section */}
+          <div className="mb-20">
+            <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border border-blue-100 dark:border-blue-800 p-8 md:p-12">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold mb-2">Need API Access?</h2>
+                <p className="text-muted-foreground">
+                  Dedicated API plans for developers and integrations starting at $49/mo
+                </p>
+              </div>
+              <div className="flex justify-center">
+                <Link href="/api-pricing">
+                  <Button variant="outline" className="gap-2">
+                    View API Pricing
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold mb-2">Frequently Asked Questions</h2>
