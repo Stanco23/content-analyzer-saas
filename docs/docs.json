@@ -43,53 +43,43 @@
       "url": "https://contentlens.dev"
     }
   ],
-  "navigation": [
-    {
-      "group": "Getting Started",
-      "pages": [
-        "index.md",
-        "authentication.md"
-      ]
-    },
-    {
-      "group": "API Reference",
-      "pages": [
-        "api-reference/index.md",
-        {
-          "group": "Content Analysis",
-          "pages": [
-            "api-reference/analyses/analyze.md",
-            "api-reference/analyses/enhance.md",
-            "api-reference/analyses/list.md"
-          ]
-        },
-        {
-          "group": "Subscriptions",
-          "pages": [
-            "api-reference/subscriptions/overview.md",
-            "api-reference/subscriptions/checkout.md",
-            "api-reference/subscriptions/portal.md",
-            "api-reference/subscriptions/sync.md",
-            "api-reference/subscriptions/trial.md"
-          ]
-        },
-        {
-          "group": "User",
-          "pages": [
-            "api-reference/user/profile.md"
-          ]
-        }
-      ]
-    },
-    {
-      "group": "Guides",
-      "pages": [
-        "guides/getting-started.md",
-        "guides/scoring-guide.md",
-        "guides/version-control.md"
-      ]
-    }
-  ],
+  "navigation": {
+    "Getting Started": [
+      "index.md",
+      "authentication.md"
+    ],
+    "API Reference": [
+      {
+        "group": "Content Analysis",
+        "pages": [
+          "api-reference/analyses/analyze.md",
+          "api-reference/analyses/enhance.md",
+          "api-reference/analyses/list.md"
+        ]
+      },
+      {
+        "group": "Subscriptions",
+        "pages": [
+          "api-reference/subscriptions/overview.md",
+          "api-reference/subscriptions/checkout.md",
+          "api-reference/subscriptions/portal.md",
+          "api-reference/subscriptions/sync.md",
+          "api-reference/subscriptions/trial.md"
+        ]
+      },
+      {
+        "group": "User",
+        "pages": [
+          "api-reference/user/profile.md"
+        ]
+      }
+    ],
+    "Guides": [
+      "guides/getting-started.md",
+      "guides/scoring-guide.md",
+      "guides/version-control.md"
+    ]
+  },
   "footerSocials": {
     "twitter": "https://twitter.com/contentlens",
     "github": "https://github.com/contentlens"
