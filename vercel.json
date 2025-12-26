@@ -6,11 +6,11 @@
     },
     {
       "source": "/api/request",
-      "destination": "https://vssh.mintlify.app/_mintlify/api/request"
+      "destination": "https://vssh.mintlify.app/api/request"
     },
     {
       "source": "/docs",
-      "destination": "https://vssh.mintlify.app/docs"
+      "destination": "https://vssh.mintlify.app"
     },
     {
       "source": "/docs/llms.txt",
@@ -34,11 +34,11 @@
     },
     {
       "source": "/docs/:path*",
-      "destination": "https://vssh.mintlify.app/docs/:path*"
+      "destination": "https://vssh.mintlify.app/:path*"
     },
     {
-      "source": "/mintlify-assets/:path+",
-      "destination": "https://vssh.mintlify.app/mintlify-assets/:path+"
+      "source": "/mintlify-assets/:path*",
+      "destination": "https://vssh.mintlify.app/mintlify-assets/:path*"
     }
   ]
 }
