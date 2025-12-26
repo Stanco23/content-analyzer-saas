@@ -6,17 +6,12 @@
     "light": "/logo.svg"
   },
   "favicon": "/favicon.ico",
-  "colors": {
-    "primary": "#312e81",
-    "light": "#4f46e5",
-    "dark": "#312e81",
-    "background": {
-      "dark": "#09090b",
-      "light": "#ffffff"
-    },
-    "anchors": {
-      "from": "#312e81",
-      "to": "#4f46e5"
+  "theme": {
+    "appearance": "dark",
+    "primaryColor": "#312e81",
+    "backgroundColor": {
+      "light": "#ffffff",
+      "dark": "#09090b"
     }
   },
   "topbarLinks": [
@@ -100,6 +95,5 @@
   "footerSocials": {
     "twitter": "https://twitter.com/contentlens",
     "github": "https://github.com/contentlens"
-  },
-  "enabled": true
+  }
 }
