@@ -87,7 +87,9 @@ export default function SettingsPage() {
 
       // Handle specific errors with helpful messages
       if (data.error === 'NO_CUSTOMER' || data.error === 'CUSTOMER_NOT_FOUND') {
-        alert(`Subscription not found. Please subscribe to a plan first to access billing management.`);
+        alert(`No subscription linked to your account yet.
+
+Please click "Sync" first to link your Polar subscription to your account.`);
       } else if (data.error === 'POLAR_API_ERROR') {
         alert(`Payment system configuration error. Please contact support at sales@contentlens.dev.`);
       } else {
