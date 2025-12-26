@@ -26,58 +26,53 @@
     "name": "Get API Key",
     "url": "https://contentlens.dev/dashboard"
   },
-  "anchors": [
-    {
-      "name": "API Reference",
-      "icon": "code",
-      "url": "/docs/api-reference"
-    },
-    {
-      "name": "Guides",
-      "icon": "book",
-      "url": "/docs/guides"
-    },
-    {
-      "name": "ContentLens",
-      "icon": "globe",
-      "url": "https://contentlens.dev"
-    }
-  ],
   "navigation": {
-    "Getting Started": [
-      "index.md",
-      "authentication.md"
-    ],
-    "API Reference": [
+    "products": [
       {
-        "group": "Content Analysis",
-        "pages": [
-          "api-reference/analyses/analyze.md",
-          "api-reference/analyses/enhance.md",
-          "api-reference/analyses/list.md"
+        "name": "Getting Started",
+        "items": [
+          "index.md",
+          "authentication.md"
         ]
       },
       {
-        "group": "Subscriptions",
-        "pages": [
-          "api-reference/subscriptions/overview.md",
-          "api-reference/subscriptions/checkout.md",
-          "api-reference/subscriptions/portal.md",
-          "api-reference/subscriptions/sync.md",
-          "api-reference/subscriptions/trial.md"
+        "name": "API Reference",
+        "items": [
+          "api-reference/index.md",
+          {
+            "name": "Content Analysis",
+            "items": [
+              "api-reference/analyses/analyze.md",
+              "api-reference/analyses/enhance.md",
+              "api-reference/analyses/list.md"
+            ]
+          },
+          {
+            "name": "Subscriptions",
+            "items": [
+              "api-reference/subscriptions/overview.md",
+              "api-reference/subscriptions/checkout.md",
+              "api-reference/subscriptions/portal.md",
+              "api-reference/subscriptions/sync.md",
+              "api-reference/subscriptions/trial.md"
+            ]
+          },
+          {
+            "name": "User",
+            "items": [
+              "api-reference/user/profile.md"
+            ]
+          }
         ]
       },
       {
-        "group": "User",
-        "pages": [
-          "api-reference/user/profile.md"
+        "name": "Guides",
+        "items": [
+          "guides/getting-started.md",
+          "guides/scoring-guide.md",
+          "guides/version-control.md"
         ]
       }
-    ],
-    "Guides": [
-      "guides/getting-started.md",
-      "guides/scoring-guide.md",
-      "guides/version-control.md"
     ]
   },
   "footerSocials": {
