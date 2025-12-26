@@ -9,6 +9,8 @@ const isPublicRoute = createRouteMatcher([
   '/api-pricing(.*)',
   '/blog(.*)',
   '/docs(.*)',
+  '/mintlify-assets/(.*)',
+  '/_next/(.*)',
   '/api/v1/(.*)',
   '/api/webhooks/(.*)',
 ]);
