@@ -34,7 +34,7 @@
     },
     {
       "source": "/docs/:path*",
-      "destination": "https://vssh.mintlify.app/docs/:path*"
+      "destination": "https://vssh.mintlify.app/:path*"
     },
     {
       "source": "/mintlify-assets/:path*",
