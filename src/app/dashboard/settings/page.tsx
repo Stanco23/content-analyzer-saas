@@ -79,10 +79,19 @@ export default function SettingsPage() {
         method: "POST",
       });
       const data = await res.json();
+
       if (data.success && data.portalUrl) {
         window.location.href = data.portalUrl;
+        return;
+      }
+
+      // Handle specific errors with helpful messages
+      if (data.error === 'NO_CUSTOMER' || data.error === 'CUSTOMER_NOT_FOUND') {
+        alert(`Subscription not found. Please subscribe to a plan first to access billing management.`);
+      } else if (data.error === 'POLAR_API_ERROR') {
+        alert(`Payment system configuration error. Please contact support at sales@contentlens.dev.`);
       } else {
-        alert(`Failed to open customer portal: ${data.error || 'Unknown error'}`);
+        alert(`Failed to open customer portal: ${data.message || data.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error("Failed to open customer portal:", error);

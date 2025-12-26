@@ -22,21 +22,42 @@ export async function POST(request: NextRequest) {
 
     if (!user.polarCustomerId) {
       return NextResponse.json({
-        error: 'No subscription found',
-        message: 'You need an active subscription to access the customer portal.'
+        error: 'NO_CUSTOMER',
+        message: 'You need an active subscription to access the customer portal. Please subscribe first.',
       }, { status: 400 });
     }
+
+    console.log('Creating portal session for customer:', user.polarCustomerId);
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
     // Create portal session
     const portal = await polar.createPortalSession(user.polarCustomerId, `${appUrl}/dashboard/settings`);
 
+    console.log('Portal session created:', portal.url);
+
     return NextResponse.json({ success: true, portalUrl: portal.url });
   } catch (error) {
     console.error('Portal error:', error);
+    const message = error instanceof Error ? error.message : String(error);
+
+    // Check for common Polar errors
+    if (message.includes('customer not found') || message.includes('404')) {
+      return NextResponse.json(
+        { error: 'CUSTOMER_NOT_FOUND', message: 'Your Polar customer account was not found. Please contact support.' },
+        { status: 400 }
+      );
+    }
+
+    if (message.includes('authentication') || message.includes('401') || message.includes('unauthorized')) {
+      return NextResponse.json(
+        { error: 'POLAR_API_ERROR', message: 'Payment provider configuration error. Please contact support.' },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { error: 'Failed to create portal session', details: error instanceof Error ? error.message : String(error) },
+      { error: 'PORTAL_ERROR', message },
       { status: 500 }
     );
   }
