@@ -22,11 +22,11 @@
   "topbarLinks": [
     {
       "name": "Documentation",
-      "url": "/"
+      "url": "/docs"
     },
     {
       "name": "API Reference",
-      "url": "/api-reference"
+      "url": "/docs/api-reference"
     }
   ],
   "topbarCtaButton": {
@@ -37,12 +37,12 @@
     {
       "name": "API Reference",
       "icon": "code",
-      "url": "/api-reference"
+      "url": "/docs/api-reference"
     },
     {
       "name": "Guides",
       "icon": "book",
-      "url": "/guides"
+      "url": "/docs/guides"
     },
     {
       "name": "ContentLens",

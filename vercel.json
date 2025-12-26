@@ -9,12 +9,20 @@
       "destination": "https://vssh.mintlify.app/docs/:match*"
     },
     {
-      "source": "/docs/_next/:match*",
+      "source": "/mintlify-assets/:match*",
+      "destination": "https://vssh.mintlify.app/mintlify-assets/:match*"
+    },
+    {
+      "source": "/_next/:match*",
       "destination": "https://vssh.mintlify.app/_next/:match*"
     },
     {
-      "source": "/docs/api/:match*",
+      "source": "/api/:match*",
       "destination": "https://vssh.mintlify.app/api/:match*"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://vssh.mintlify.app/sitemap.xml"
     }
   ]
 }
