@@ -6,14 +6,7 @@
     "light": "/logo.svg"
   },
   "favicon": "/favicon.ico",
-  "theme": {
-    "appearance": "dark",
-    "primaryColor": "#312e81",
-    "backgroundColor": {
-      "light": "#ffffff",
-      "dark": "#09090b"
-    }
-  },
+  "theme": "mint",
   "topbarLinks": [
     {
       "name": "Documentation",
