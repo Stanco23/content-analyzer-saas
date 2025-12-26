@@ -11,6 +11,7 @@ const isPublicRoute = createRouteMatcher([
   '/docs(.*)',
   '/mintlify-assets/(.*)',
   '/_next/(.*)',
+  '/_mintlify/(.*)',
   '/api/v1/(.*)',
   '/api/webhooks/(.*)',
 ]);

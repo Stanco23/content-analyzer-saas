@@ -5,20 +5,20 @@
       "destination": "https://vssh.mintlify.app/docs"
     },
     {
-      "source": "/docs/:match*",
-      "destination": "https://vssh.mintlify.app/docs/:match*"
+      "source": "/docs/:path*",
+      "destination": "https://vssh.mintlify.app/docs/:path*"
     },
     {
-      "source": "/mintlify-assets/:match*",
-      "destination": "https://vssh.mintlify.app/mintlify-assets/:match*"
+      "source": "/mintlify-assets/:path*",
+      "destination": "https://vssh.mintlify.app/mintlify-assets/:path*"
     },
     {
-      "source": "/_next/:match*",
-      "destination": "https://vssh.mintlify.app/_next/:match*"
+      "source": "/_next/:path*",
+      "destination": "https://vssh.mintlify.app/_next/:path*"
     },
     {
-      "source": "/api/:match*",
-      "destination": "https://vssh.mintlify.app/api/:match*"
+      "source": "/_mintlify/:path*",
+      "destination": "https://vssh.mintlify.app/_mintlify/:path*"
     },
     {
       "source": "/sitemap.xml",
