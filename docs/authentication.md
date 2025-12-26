@@ -141,6 +141,6 @@ try {
 
 ## Next Steps
 
-- [API Reference](/api-reference) - Browse all endpoints
-- [Analyze Endpoint](/api-reference/analyses/analyze) - Start analyzing content
-- [Rate Limits](/api-reference#rate-limits) - Understand usage limits
+- [API Reference](/docs/api-reference) - Browse all endpoints
+- [Analyze Endpoint](/docs/api-reference/analyses/analyze) - Start analyzing content
+- [Rate Limits](/docs/api-reference#rate-limits) - Understand usage limits

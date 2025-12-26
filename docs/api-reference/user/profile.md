@@ -157,6 +157,6 @@ print(f"Used: {user['monthlyAnalysesUsed']}/{user['subscriptionLimit']}")
 
 ## See Also
 
-- [Sync Subscription](/api-reference/subscriptions/sync) - Update subscription status
-- [Create Checkout](/api-reference/subscriptions/checkout) - Upgrade plan
-- [Customer Portal](/api-reference/subscriptions/portal) - Manage subscription
+- [Sync Subscription](/docs/api-reference/subscriptions/sync) - Update subscription status
+- [Create Checkout](/docs/api-reference/subscriptions/checkout) - Upgrade plan
+- [Customer Portal](/docs/api-reference/subscriptions/portal) - Manage subscription

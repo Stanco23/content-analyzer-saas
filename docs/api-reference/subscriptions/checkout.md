@@ -186,6 +186,6 @@ print(f"Checkout URL: {checkout['url']}")
 
 ## See Also
 
-- [Customer Portal](/api-reference/subscriptions/portal) - Manage existing subscription
-- [Sync Subscription](/api-reference/subscriptions/sync) - Update subscription status
-- [Trial Endpoint](/api-reference/subscriptions/trial) - Start free trial
+- [Customer Portal](/docs/api-reference/subscriptions/portal) - Manage existing subscription
+- [Sync Subscription](/docs/api-reference/subscriptions/sync) - Update subscription status
+- [Trial Endpoint](/docs/api-reference/subscriptions/trial) - Start free trial

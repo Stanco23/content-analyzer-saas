@@ -251,7 +251,7 @@ try {
 
 ## Next Steps
 
-1. [API Reference](/api-reference) - Full endpoint documentation
-2. [Authentication Guide](/authentication) - Advanced auth patterns
-3. [Scoring Guide](/guides/scoring-guide) - Understanding score metrics
-4. [Examples](/examples) - Complete integration examples
+1. [API Reference](/docs/api-reference) - Full endpoint documentation
+2. [Authentication Guide](/docs/authentication) - Advanced auth patterns
+3. [Scoring Guide](/docs/guides/scoring-guide) - Understanding score metrics
+4. [Examples](/docs/examples) - Complete integration examples

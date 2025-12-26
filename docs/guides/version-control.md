@@ -148,6 +148,6 @@ SEO-optimized version: def456
 
 ## See Also
 
-- [List Analyses](/api-reference/analyses/list) - Retrieve analyses with grouping
-- [Enhance Content](/api-reference/analyses/enhance) - Create new versions
-- [Analyze Content](/api-reference/analyses/analyze) - Create original analysis
+- [List Analyses](/docs/api-reference/analyses/list) - Retrieve analyses with grouping
+- [Enhance Content](/docs/api-reference/analyses/enhance) - Create new versions
+- [Analyze Content](/docs/api-reference/analyses/analyze) - Create original analysis

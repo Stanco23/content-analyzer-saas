@@ -270,6 +270,6 @@ This endpoint is not rate-limited per se, but uses your standard API quota.
 
 ## See Also
 
-- [Analyze Content](/api-reference/analyses/analyze) - Create new analysis
-- [Enhance Content](/api-reference/analyses/enhance) - Create enhanced version
-- [Version Control Guide](/guides/version-control) - Understanding version chains
+- [Analyze Content](/docs/api-reference/analyses/analyze) - Create new analysis
+- [Enhance Content](/docs/api-reference/analyses/enhance) - Create enhanced version
+- [Version Control Guide](/docs/guides/version-control) - Understanding version chains

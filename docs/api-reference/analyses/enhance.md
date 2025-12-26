@@ -137,7 +137,7 @@ When you provide an `analysisId`, the enhanced version is linked to the original
 }
 ```
 
-Use [List Analyses](/api-reference/analyses/list) with `group=true` to retrieve version chains.
+Use [List Analyses](/docs/api-reference/analyses/list) with `group=true` to retrieve version chains.
 
 ---
 
@@ -276,6 +276,6 @@ Each enhancement counts as one analysis toward your monthly limit.
 
 ## See Also
 
-- [Analyze Content](/api-reference/analyses/analyze) - Get quality scores
-- [List Analyses](/api-reference/analyses/list) - View version history
-- [Version Control Guide](/guides/version-control) - Managing content revisions
+- [Analyze Content](/docs/api-reference/analyses/analyze) - Get quality scores
+- [List Analyses](/docs/api-reference/analyses/list) - View version history
+- [Version Control Guide](/docs/guides/version-control) - Managing content revisions
