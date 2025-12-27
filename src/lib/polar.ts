@@ -11,6 +11,7 @@ export const POLAR_PRODUCTS = {
   BUSINESS_ANNUAL: process.env.POLAR_PRODUCT_BUSINESS_ANNUAL!,
   API_STARTER: process.env.POLAR_PRODUCT_API_STARTER!,
   API_GROWTH: process.env.POLAR_PRODUCT_API_GROWTH!,
+  API_GROWTH_ANNUAL: process.env.POLAR_PRODUCT_API_GROWTH_ANNUAL!,
   API_ENTERPRISE: process.env.POLAR_PRODUCT_API_ENTERPRISE!,
 } as const;
 
@@ -21,6 +22,7 @@ export const TIER_TO_PRODUCT: Record<string, string> = {
   BUSINESS_ANNUAL: process.env.POLAR_PRODUCT_BUSINESS_ANNUAL!,
   API_STARTER: process.env.POLAR_PRODUCT_API_STARTER!,
   API_GROWTH: process.env.POLAR_PRODUCT_API_GROWTH!,
+  API_GROWTH_ANNUAL: process.env.POLAR_PRODUCT_API_GROWTH_ANNUAL!,
   API_ENTERPRISE: process.env.POLAR_PRODUCT_API_ENTERPRISE!,
 };
 
@@ -117,7 +119,7 @@ export class PolarAPI {
 
   async createCheckoutSession(params: {
     customer_id?: string;
-    product_id: string;
+    products: string[];
     success_url: string;
     cancel_url?: string;
     customer_email?: string;
@@ -132,7 +134,7 @@ export class PolarAPI {
   }
 
   async createPortalSession(customerId: string, returnUrl: string): Promise<PolarPortalSession> {
-    return this.request<PolarPortalSession>('/customer-portal-sessions', {
+    return this.request<PolarPortalSession>('/customer-sessions', {
       method: 'POST',
       body: JSON.stringify({
         customer_id: customerId,

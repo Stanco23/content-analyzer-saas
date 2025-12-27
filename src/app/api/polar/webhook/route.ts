@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { headers } from 'next/headers';
 import { prisma } from '@/lib/db/prisma';
-import { Webhook } from 'svix';
+import crypto from 'crypto';
 
 interface PolarWebhookPayload {
   event_id: string;
@@ -16,6 +15,9 @@ interface PolarWebhookPayload {
     current_period_end: string;
     canceled_at: string | null;
     ended_at: string | null;
+    customer_email?: string;
+    subscription_id?: string;
+    email?: string;
   };
 }
 
@@ -30,9 +32,8 @@ function tierFromProductId(productId: string): string | null {
   // API products
   if (productId === env.POLAR_PRODUCT_API_STARTER) return 'API_STARTER';
   if (productId === env.POLAR_PRODUCT_API_GROWTH) return 'API_GROWTH';
-  if (productId === env.POLAR_PRODUCT_API_ENTERPRISE) return 'API_ENTERPRISE';
-  // API annual products
   if (productId === env.POLAR_PRODUCT_API_GROWTH_ANNUAL) return 'API_GROWTH';
+  if (productId === env.POLAR_PRODUCT_API_ENTERPRISE) return 'API_ENTERPRISE';
   return null;
 }
 
@@ -40,6 +41,8 @@ function statusToSubscriptionStatus(status: string): 'ACTIVE' | 'INACTIVE' | 'CA
   switch (status) {
     case 'active':
       return 'ACTIVE';
+    case 'trialing':
+      return 'TRIALING';
     case 'inactive':
       return 'INACTIVE';
     case 'canceled':
@@ -51,6 +54,33 @@ function statusToSubscriptionStatus(status: string): 'ACTIVE' | 'INACTIVE' | 'CA
   }
 }
 
+function verifyPolarSignature(payload: string, signature: string, secret: string): boolean {
+  try {
+    // Polar signature format: t={timestamp},v1={signature}
+    const parts = signature.split(',');
+    const timestamp = parts[0]?.replace('t=', '');
+    const sig = parts[1]?.replace('v1=', '');
+
+    if (!timestamp || !sig) {
+      return false;
+    }
+
+    // Create signed payload
+    const signedPayload = `${timestamp}.${payload}`;
+
+    // Compute expected signature
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(signedPayload)
+      .digest('hex');
+
+    // Use timing-safe comparison
+    return crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expectedSignature));
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(req: NextRequest) {
   const WEBHOOK_SECRET = process.env.POLAR_WEBHOOK_SECRET;
 
@@ -59,39 +89,27 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
   }
 
-  // Get headers
-  const headerPayload = await headers();
-  const svix_id = headerPayload.get('svix-id');
-  const svix_timestamp = headerPayload.get('svix-timestamp');
-  const svix_signature = headerPayload.get('svix-signature');
+  // Get raw body for signature verification
+  const body = await req.text();
+  const payload = JSON.parse(body);
 
-  if (!svix_id || !svix_timestamp || !svix_signature) {
-    console.error('Missing Svix headers');
-    return NextResponse.json({ error: 'Missing webhook headers' }, { status: 400 });
+  // Get Polar signature header
+  const polarSignature = req.headers.get('polar-signature');
+
+  if (!polarSignature) {
+    console.error('Missing polar-signature header');
+    return NextResponse.json({ error: 'Missing signature header' }, { status: 400 });
   }
 
-  // Get body
-  const payload = await req.json();
-  const body = JSON.stringify(payload);
-
-  // Create Svix webhook instance
-  const wh = new Webhook(WEBHOOK_SECRET);
-
-  let evt: any;
-
-  try {
-    evt = wh.verify(body, {
-      'svix-id': svix_id,
-      'svix-timestamp': svix_timestamp,
-      'svix-signature': svix_signature,
-    });
-  } catch (err) {
-    console.error('Webhook verification failed:', err);
+  // Verify signature
+  const isValid = verifyPolarSignature(body, polarSignature, WEBHOOK_SECRET);
+  if (!isValid) {
+    console.error('Invalid webhook signature');
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
   }
 
-  const eventType = evt.type;
-  const data = evt.data;
+  const eventType = payload.event_type;
+  const data = payload.data as PolarWebhookPayload['data'];
 
   console.log(`Processing Polar webhook: ${eventType}`, JSON.stringify(data, null, 2));
 
@@ -102,7 +120,7 @@ export async function POST(req: NextRequest) {
         if (data.status === 'paid') {
           // Find user by email (Polar sends customer email in checkout)
           const user = await prisma.user.findFirst({
-            where: { email: data.customer_email },
+            where: { email: data.customer_email || data.email },
           });
 
           if (user) {
@@ -216,7 +234,7 @@ export async function POST(req: NextRequest) {
         const customerData = data as any;
         // Store customer ID for user if email matches
         const user = await prisma.user.findFirst({
-          where: { email: (customerData as any).email },
+          where: { email: customerData.email },
         });
 
         if (user && !user.polarCustomerId) {

@@ -36,13 +36,13 @@ export async function POST(request: NextRequest) {
 
     // Build checkout params - only include customer_id if it exists
     const checkoutParams: {
-      product_id: string;
+      products: string[];
       success_url: string;
       cancel_url?: string;
       customer_email?: string;
       customer_id?: string;
     } = {
-      product_id: productId,
+      products: [productId],
       success_url: `${appUrl}/dashboard?checkout=success`,
       customer_email: user.email,
     };
